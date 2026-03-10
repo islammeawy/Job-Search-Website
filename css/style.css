@@ -3,6 +3,13 @@ body{
     margin:0;
     background:#f4f4f4;
 }
+.section{
+  padding : 60px 0;
+}
+.container{
+    width:80%;
+    margin:0 auto;
+}
 
 .navbar{
     display:flex;
@@ -24,10 +31,23 @@ body{
     color:white;
     text-decoration:none;
 }
-
+.card{
+    background:white;
+    padding:20px;
+    margin:10px;
+    border-radius:8px;
+}
 .job-card{
     background:white;
     padding:20px;
     margin:10px;
     border-radius:8px;
+}
+button{
+    background:#007BFF;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:5px;
+    cursor:pointer;
 }
