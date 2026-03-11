@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - JobFinder</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-image">
+                <img class="logo-img" src="images/logo.jpg" alt="logo-image">
+            </div>
+            <nav class="navbar">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="applied.html">Applied Jobs</a></li>
+                    <li><a href="search.html">Search</a></li>
+                </ul>
+            </nav>
+            <div>
+                <a href="login.html"><button>Login</button></a>
+            </div>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <h2>Create Your Account</h2>
+                <form action="/signup" method="post">
+                    <label for="fullname">Full Name:</label>
+                    <input type="text" id="fullname" name="fullname" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                    <br><br>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                    <br><br>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                    <br><br>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                    <br><br>
+                    <label for="confirm_password">Confirm Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                    <br><br>
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I agree to the <a href="#" style="color: #007BFF;">Terms and Conditions</a></label>
+                    <br><br>
+                    <button type="submit" style="width: 100%;">Sign Up</button>
+                </form>
+                <p style="text-align: center; margin-top: 20px;">
+                    Already have an account? <a href="login.html">Login here</a>
+                </p>
+            </div>
+        </div>
+    </section>
+</body>
+</html></content>
+<parameter name="filePath">c:\Users\User\OneDrive\Desktop\JOBS_WEB\Job-Search-Website\signup.html

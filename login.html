@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - JobFinder</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-image">
+                <img class="logo-img" src="images/logo.jpg" alt="logo-image">
+            </div>
+            <nav class="navbar">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="applied.html">Applied Jobs</a></li>
+                    <li><a href="search.html">Search</a></li>
+                </ul>
+            </nav>
+            <div>
+                <a href="signup.html"><button>Sign Up</button></a>
+            </div>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <h2>Login to Your Account</h2>
+                <form action="/login" method="post">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                    <br><br>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                    <br><br>
+                    <button type="submit" style="width: 100%;">Login</button>
+                </form>
+                <p style="text-align: center; margin-top: 20px;">
+                    Don't have an account? <a href="signup.html">Sign up here</a>
+                </p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
