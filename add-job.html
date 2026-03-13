@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Add Job</title>
+</head>
+
+<body>
+<h1>Add Job</h1>
+
+<form action="/add-job" method="post">
+    
+    <label>Job Title:</label><br>
+    <input type="text" name="job_title"><br><br>
+
+    <label>Salary:</label><br>
+    <input type="text" name="salary"><br><br>
+
+    <label>Company Name:</label><br>
+    <input type="text" name="company_name"><br><br>
+
+    <label>Required years of Experience:</label><br>
+    <input type="text" name="years_experience"><br><br>
+
+    <label>Job Status:</label><br>
+    <select name="job_status">
+        <option>open</option>
+        <option>closed</option>
+    </select><br><br>
+
+    <label>Description:</label><br>
+    <textarea name="description" rows="5" cols="30"></textarea><br><br>
+
+    <button type="submit">Add Job</button>
+
+</form>
+
+</body>
+</html>
