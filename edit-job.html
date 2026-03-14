@@ -1,39 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Job</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h1>Edit Job</h1>
+<header>
+    <div class="logo-image">
+        <img class="logo-img" src="images/logo.jpg" alt="logo-image">
+    </div>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="jobs.html">Jobs</a></li>
+            <li><a href="applied.html">Applied Jobs</a></li>
+            <li><a href="search.html">Search</a></li>
+        </ul>
+    </nav>
+</header>
 
-<form action="/edit-job" method="post">
-    
-    <label>Job Title:</label><br>
-    <input type="text" name="job_title"><br><br>
+<main>
+    <section class="section">
+        <div class="container">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <h2>Edit Job</h2>
+                <form action="/edit-job" method="post">
+                    
+                    <label>Job Title:</label><br>
+                    <input type="text" name="job_title" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;"><br><br>
 
-    <label>Salary:</label><br>
-    <input type="text" name="salary"><br><br>
+                    <label>Salary:</label><br>
+                    <input type="text" name="salary" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;"><br><br>
 
-    <label>Company Name:</label><br>
-    <input type="text" name="company_name"><br><br>
+                    <label>Company Name:</label><br>
+                    <input type="text" name="company_name" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;"><br><br>
 
-    <label>Years of Experience:</label><br>
-    <input type="text" name="years_experience"><br><br>
+                    <label>Years of Experience:</label><br>
+                    <input type="text" name="years_experience" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;"><br><br>
 
-    <label>Job Status:</label><br>
-    <select name="job_status">
-        <option>open</option>
-        <option>closed</option>
-    </select><br><br>
+                    <label>Job Status:</label><br>
+                    <select name="job_status" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                        <option>open</option>
+                        <option>closed</option>
+                    </select><br><br>
 
-    <label>Description:</label><br>
-    <textarea name="description" rows="5" cols="30"></textarea><br><br>
+                    <label>Description:</label><br>
+                    <textarea name="description" rows="5" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;"></textarea><br><br>
 
-    <button type="submit">Update Job</button>
-    <button type="button" onclick="window.history.back()">Cancel</button>
+                    <button type="submit" style="width: 100%;">Update Job</button>
+                    <button type="button" onclick="window.history.back()" style="width: 100%; background: #6c757d; margin-top: 10px;">Cancel</button>
 
-</form>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <p>Job Search Website</p>
+</footer>
 
 </body>
 </html>
