@@ -43,6 +43,29 @@
                     <label for="confirm_password">Confirm Password:</label>
                     <input type="password" id="confirm_password" name="confirm_password" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
                     <br><br>
+
+                    <fieldset style="border: 1px solid #ccc; padding: 12px; border-radius: 4px;">
+                        <legend>User Type</legend>
+                        <label>
+                            <input type="radio" name="user_type" value="seeker" id="type_seeker" checked>
+                            Job Seeker
+                        </label>
+                        <label style="margin-left: 16px;">
+                            <input type="radio" name="user_type" value="company" id="type_company">
+                            Company Admin
+                        </label>
+                    </fieldset>
+                    <br>
+
+                    <div id="companyFields" style="display: none;">
+                        <label for="company_name">Company Name:</label>
+                        <input type="text" id="company_name" name="company_name" style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                        <br><br>
+                        <label for="company_website">Company Website (optional):</label>
+                        <input type="url" id="company_website" name="company_website" placeholder="https://" style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                        <br><br>
+                    </div>
+
                     <input type="checkbox" id="terms" name="terms" required>
                     <label for="terms">I agree to the <a href="#" style="color: #007BFF;">Terms and Conditions</a></label>
                     <br><br>
@@ -54,6 +77,18 @@
             </div>
         </div>
     </section>
+
+    <script>
+        const companyFields = document.getElementById('companyFields');
+        const userTypeRadios = document.querySelectorAll('input[name="user_type"]');
+
+        function updateCompanyFields() {
+            companyFields.style.display = document.getElementById('type_company').checked ? 'block' : 'none';
+        }
+
+        userTypeRadios.forEach(radio => radio.addEventListener('change', updateCompanyFields));
+        updateCompanyFields();
+    </script>
 </body>
 </html></content>
 <parameter name="filePath">c:\Users\User\OneDrive\Desktop\JOBS_WEB\Job-Search-Website\signup.html
