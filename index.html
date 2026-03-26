@@ -9,25 +9,26 @@
   <body>
     <header>
       <div class="container">
-        
-        <nav class="navbar">
-          
-          <div class="logo-image">
+        <div class="logo-image">
             <img class="logo-img" src="images/logo.jpg" alt="logo-image">
           </div>
-
+        <div>
+          <nav class="navbar">
           <ul class="nav-links">
               <li><a href="index.html">Home</a></li>
               <li><a href="jobs.html">Jobs</a></li>
               <li><a href="applied.html">Applied Jobs</a></li>
               <li><a href="search.html">Search</a></li>
           </ul>
+        </nav>
+        </div>
+        
           
           <div>
             <a href="login.html"><button>Login</button></a>
             <a href="signup.html"><button>Sign Up</button></a>
           </div>
-        </nav>
+        
         
       </div>
     </header>
@@ -37,8 +38,10 @@
       <div class="hero-content">
         <h1>Welcome to JobFinder</h1>
         <p>Find your dream job today!</p>
-        <a href="search.html" class="btn">Search Jobs</a>
-        <a href="jobs.html" class="btn btn-secondary">View All Jobs</a>
+        <div class="hero-buttons">
+          <a href="search.html" class="btn">Search Jobs</a>
+          <a href="jobs.html" class="btn btn-secondary">View All Jobs</a>
+        </div>
       </div>
       <div class="hero-photo">
         <img src="images/hero.jpg" alt="hero-image">
