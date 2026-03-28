@@ -522,3 +522,143 @@ button:hover{
     border: 2px solid var(--danger-color);
 
 }
+
+
+.job-det{
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.Job-List{
+  padding: 20px;
+}
+
+#Av-Jobs{
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  text-align: center;
+  
+
+}
+
+
+.job-det:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  transition: 0.3s;
+}
+
+
+.job-det h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.job-det p {
+  color: #555;
+  margin: 6px 0;
+  font-weight: 600;
+}
+
+
+
+.job-det a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: #007bff;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  border-left: 5px solid #007bff
+}
+
+.job-det a:hover {
+  background: #0056b3;
+}
+
+
+
+.Job-List {
+  padding: 30px;
+  max-width: 900px;
+  margin: auto;
+}
+
+
+.job-details{
+  padding: 30px;
+  max-width: 900px;
+  margin: auto;
+}
+
+
+.Job-Description{
+
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+
+.Job-Description a{
+display: inline-block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: #007bff;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  border-left: 5px solid #007bff
+}
+
+
+
+.Job-Description h1 {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+
+.Job-Description h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.job-det p {
+  color: #555;
+  margin: 6px 0;
+  font-weight: 600;
+}
+
+
+.Job-Description a:hover {
+  background: #0056b3;
+}
+
+
+
+.Job-Description:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  transition: 0.3s;
+}
+
+
+#jobs-header{
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  text-align: center;
+  padding-bottom: 20px;
+}
