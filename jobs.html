@@ -1,104 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/style.css">
-        <title>Jobs</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Jobs</title>
+</head>
 
-    <body>
-        
-      <header>
-      <div class="container">
-        
-        <nav class="navbar">
-          
-          <div class="logo-image">
-            <img class="logo-img" src="images/logo.jpg" alt="logo-image">
-          </div>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo-image">
+                    <img class="logo-img" src="images/logo.jpg" alt="logo-image">
+                </div>
 
-          <ul class="nav-links">
-              <li><a href="index.html">Home</a></li>
-              <li><a href="jobs.html">Jobs</a></li>
-              <li><a href="applied.html">Applied Jobs</a></li>
-              <li><a href="search.html">Search</a></li>
-          </ul>
-          
-          <div>
-            <a href="login.html"><button>Login</button></a>
-            <a href="signup.html"><button>Sign Up</button></a>
-          </div>
-        </nav>
-        
-      </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="jobs.html">Jobs</a></li>
+                    <li><a href="applied.html">Applied Jobs</a></li>
+                    <li><a href="search.html">Search</a></li>
+                </ul>
+
+                <div>
+                    <a href="login.html"><button>Login</button></a>
+                    <a href="signup.html"><button>Sign Up</button></a>
+                </div>
+            </nav>
+        </div>
     </header>
 
-        <main>
-            <h1 id="Av-Jobs">Available Jobs</h1>
+    <main>
+        <h1 id="Av-Jobs">Available Jobs</h1>
 
-            <section class="Job-List">
-                <article class="job-det">
-                    <h2>Frontend Developer</h2>
-                    <p>Company: Google</p>
-                    <p>Salary: $5000</p>
-                    <p>Experience: 2 years</p>
-                    <p class="status">Status: Open</p>
-                    <a href="job-details.html">View Details</a>
-                </article>
-                
+        <section class="Job-List">
+            <article class="job-det" id="frontend">
+                <h2>Frontend Developer</h2>
+                <p>Company: Google</p>
+                <p>Salary: $5000</p>
+                <p>Experience: 2 years</p>
+                <p class="status">Status: Open</p>
+                <a href="job-details.html" class="view-details">View Details</a>
+                <button class="apply-btn">Apply</button>
+            </article>
 
-                <article class="job-det">
-                    <h2>Backend Developer</h2>
-                    <p>Company: Microsoft</p>
-                    <p>Salary: $10000</p>
-                    <p>Experience: 3+ years</p>
-                    <p class="status">Status: Open</p>
-                    <a href="job-details.html">View Details</a>
-                </article>
+            <article class="job-det" id="backend">
+                <h2>Backend Developer</h2>
+                <p>Company: Microsoft</p>
+                <p>Salary: $10000</p>
+                <p>Experience: 3+ years</p>
+                <p class="status">Status: Closed</p>
+                <a href="job-details.html" class="view-details">View Details</a>
+                <button class="apply-btn">Apply</button>
+            </article>
 
+            <article class="job-det" id="data-analyst">
+                <h2>Data Analyst Developer</h2>
+                <p>Company: Sprints</p>
+                <p>Salary: $7000</p>
+                <p>Experience: 1 year</p>
+                <p class="status">Status: Open</p>
+                <a href="job-details.html" class="view-details">View Details</a>
+                <button class="apply-btn">Apply</button>
+            </article>
 
-                <article class="job-det">
-                    <h2>Data Analyst Developer</h2>
-                    <p>Company: Sprints</p>
-                    <p>Salary: $7000</p>
-                    <p>Experience: 1 years</p>
-                    <p class="status">Status: Open</p>
-                    <a href="job-details.html">View Details</a>
-                </article>
+            <article class="job-det" id="ui-ux">
+                <h2>UI/UX Designer</h2>
+                <p>Company: Google</p>
+                <p>Salary: $15000</p>
+                <p>Experience: 4 years</p>
+                <p class="status">Status: Open</p>
+                <a href="job-details.html" class="view-details">View Details</a>
+                <button class="apply-btn">Apply</button>
+            </article>
 
-                <article class="job-det">
-                    <h2>UI/UX Designer</h2>
-                    <p>Company: Google</p>
-                    <p>Salary: $15000</p>
-                    <p>Experience: 4 years</p>
-                    <p class="status">Status: Open</p>
-                    <a href="job-details.html">View Details</a>
-                </article>
-                
-                <article class="job-det">
-                    <h2>Full Stack Developer</h2>
-                    <p>Company: Nvidia</p>
-                    <p>Salary: $15000</p>
-                    <p>Experience: 5 years</p>
-                    <p class="status">Status: Open</p>
-                    <a href="job-details.html">View Details</a>
-                </article>
+            <article class="job-det" id="full-stack">
+                <h2>Full Stack Developer</h2>
+                <p>Company: Nvidia</p>
+                <p>Salary: $15000</p>
+                <p>Experience: 5 years</p>
+                <p class="status">Status: Open</p>
+                <a href="job-details.html" class="view-details">View Details</a>
+                <button class="apply-btn">Apply</button>
+            </article>
 
-                <article class="job-det">
-                    <h2>Cyber Security Engineer</h2>
-                    <p>Company: Cyshield</p>
-                    <p>Salary: $20000</p>
-                    <p>Experience: 6+ years</p>
-                    <p class="status">Status: Open</p>
-                    <a href="job-details.html">View Details</a>
-                </article>
-            </section>
-        </main>
+            <article class="job-det" id="cyber-security">
+                <h2>Cyber Security Engineer</h2>
+                <p>Company: Cyshield</p>
+                <p>Salary: $20000</p>
+                <p>Experience: 6+ years</p>
+                <p class="status">Status: Open</p>
+                <a href="job-details.html" class="view-details">View Details</a>
+                <button class="apply-btn">Apply</button>
+            </article>
+        </section>
+    </main>
 
-        <footer class="footer">
-            <p>Job Search Website</p>
-        </footer>
+    <footer class="footer">
+        <p>Job Search Website</p>
+    </footer>
 
-    </body>
+    <script src="scripts/jobs.js"></script>
+</body>
 </html>
