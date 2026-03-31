@@ -23,7 +23,7 @@
                 </nav>
             </div>
             
-            <div>
+            <div class="nav-actions">
                 <a href="signup.html"><button>Sign Up</button></a>
             </div>
         </div>
@@ -33,7 +33,7 @@
         <div class="container">
             <div class="card" style="max-width: 500px; margin: 0 auto;">
                 <h2>Login to Your Account</h2>
-                <form action="/login" method="post">
+                <form id="loginForm" action="/login" method="post">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
                     <br><br>
@@ -101,6 +101,7 @@
         &copy; 2025 . All rights reserved.
     </p>
 </footer>
+    <script defer src="scripts/main.js"></script>
     <script defer src="scripts/login.js"></script>
 </body>
 </html>

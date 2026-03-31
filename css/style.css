@@ -216,7 +216,16 @@ header .container {
   text-decoration: none;
 }
 
-/* Buttons on RIGHT */
+/* Auth buttons on RIGHT (used by main.js — do not clear .container) */
+.nav-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: nowrap;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+/* Legacy: single wrapper; prefer .nav-actions on inner button group */
 header > div:last-child {
   display: flex;
   gap: var(--spacing-md);
