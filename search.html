@@ -9,126 +9,121 @@
 </head>
 
 <body>
- <header>
-      <div class="container">
-        <div class="logo-image">
-            <img class="logo-img" src="images/logo.jpg" alt="logo-image">
-          </div>
-        <div>
-          <nav class="navbar">
-          <ul class="nav-links">
-              <li><a href="index.html">Home</a></li>
-              <li><a href="jobs.html">Jobs</a></li>
-              <li><a href="applied.html">Applied Jobs</a></li>
-              <li><a href="search.html">Search</a></li>
-          </ul>
-        </nav>
-        </div>
-        
-          
-          <div>
-            <a href="login.html"><button>Login</button></a>
-            <a href="signup.html"><button>Sign Up</button></a>
-          </div>
-        
-        
-      </div>
-    </header>
 
+<header>
+    <div class="container">
+        <div class="logo-image">
+            <img class="logo-img" src="images/logo.jpg" alt="JobFinder Logo">
+        </div>
+
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="applied.html">Applied Jobs</a></li>
+                <li><a href="search.html" aria-current="page">Search</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
 
 <main>
-
 <section class="search-section">
 <div class="container">
-
     <h1>Explore Jobs</h1>
     <p>Search for a job that matches your skills.</p>
 
-    <form action="jobs.html" method="get">
-
+    <form action="jobs.html" method="get" id="jobSearchForm" novalidate>
+        
+        <!-- Job Title -->
         <div class="form-group">
-            <label for="job_title">Job Title</label>
+            <label for="job_title">Job Title <span class="required">*</span></label>
+            <div class="input-wrapper">
+                <input 
+                    type="text" 
+                    id="job_title" 
+                    name="job_title" 
+                    placeholder="e.g., Developer, Designer, Manager"
+                    aria-describedby="job-error job-hint"
+                    autocomplete="off"
+                    required
+                >
+                <span id="char-count" class="char-count" aria-live="polite">0/100</span>
+            </div>
+            <small id="job-hint" class="hint">Letters, numbers, and hyphens only</small>
+            <small id="job-error" class="error-message" role="alert"></small>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+            <label for="location">Location</label>
             <input 
                 type="text" 
-                id="job_title" 
-                name="job_title" 
-                placeholder="Enter job title or keyword"
+                id="location" 
+                name="location" 
+                placeholder="City, state, or 'Remote'"
+                autocomplete="address-level2"
             >
-            <small id="job-error" class="error-message"></small>
         </div>
-        <br><br>
+
+        <!-- Job Type -->
+        <div class="form-group">
+            <fieldset>
+                <legend>Job Type</legend>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="job_type" value="full-time">
+                        Full-time
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="job_type" value="part-time">
+                        Part-time
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="job_type" value="remote">
+                        Remote
+                    </label>
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- Experience -->
         <div class="form-group">
             <label for="experience">Years of Experience</label>
-
-            <select name="experience" id="experience">
+            <select name="experience" id="experience" aria-label="Select years of experience">
                 <option value="">Any</option>
                 <option value="0-1">0 - 1 years</option>
                 <option value="2-4">2 - 4 years</option>
                 <option value="5+">5+ years</option>
             </select>
         </div>
-        <br><br>
-        <button type="submit" class="btn">Find Jobs</button>
 
+        <!-- Salary Range (Optional) -->
+        <div class="form-group">
+            <label for="salary">Minimum Salary (Optional)</label>
+            <input 
+                type="number" 
+                id="salary" 
+                name="salary" 
+                placeholder="e.g., 50000"
+                min="0"
+                step="1000"
+            >
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Find Jobs</button>
+            <button type="reset" class="btn btn-secondary">Clear Filters</button>
+        </div>
+
+        <div id="form-success" class="success-message" role="alert" aria-live="polite"></div>
     </form>
 
 </div>
 </section>
-
 </main>
-<footer class="footer">
-    <div class="footer-content">
-        <div class="footer-left">
-            <div class="footer-logo">
-                <img class="logo-image" src="images/logo.jpg" alt="Logo" 
-                height="60px"
-                width="60px"
-                >
-            </div>
-            <p class="footer-desc">
-              JobFinder is your go-to platform for finding the perfect job.
-                <br>
-                We connect job seekers with top employers, making the job search process easier and more efficient. Whether you're looking for your first job or your next career move, JobFinder has you covered.
-            </p>
-            <div class="footer-socials">
-                <a href="#"><img src="icons/x.jpg" alt="Twitter"
-                  height="60px"
-                width="60px"></a>
-                <a href="#"><img src="icons/discord.png" alt="discord"
-                  height="60px"
-                width="60px"></a>
-                <a href="#"><img src="icons/linkedin.png" alt="LinkedIn"
-                  height="60px"
-                width="60px"></a>
-            </div>
-        </div>
-        <div class="footer-links-group">
-            <div class="footer-links">
-                <h4>Product</h4>
-                <a href="#features">Features</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#integrations">Integrations</a>
-                <a href="#">API</a>
-            </div>
-            <div class="footer-links">
-                <h4>Company</h4>
-                <a href="#">About</a>
-                <a href="#">Blog</a>
-                <a href="#">Careers</a>
-                <a href="#contact">Contact</a>
-            </div>
-            <div class="footer-links">
-                <h4>Legal</h4>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Security</a>
-            </div>
-        </div>
-    </div>
-    <p class="footer-copyright">
-        &copy; 2025 . All rights reserved.
-    </p>
-</footer>
+
 <script src="scripts/search.js"></script>
 </body>
 </html>
