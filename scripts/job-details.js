@@ -71,7 +71,7 @@ if (job) {
 
 let applyBtn = document.getElementById("apply-btn");
 
-applyBtn.addEventListener("click", function () {
+if (applyBtn) applyBtn.addEventListener("click", function () {
     if (!job) {
         alert("No job selected");
         return;

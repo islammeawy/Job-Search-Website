@@ -1,4 +1,123 @@
 // ========================================
+// JOB CATALOG (ids match jobs.html / selectedJob)
+// ========================================
+window.JOBS_CATALOG = {
+    frontend: {
+        title: "Frontend Developer",
+        company: "Google",
+        salary: "$5000",
+        experience: "2 years",
+        status: "Open",
+        description:
+            "We are looking for a frontend developer with strong HTML, CSS, and JavaScript skills.",
+    },
+    backend: {
+        title: "Backend Developer",
+        company: "Microsoft",
+        salary: "$10000",
+        experience: "3+ years",
+        status: "Closed",
+        description:
+            "We are looking for a Backend Developer to build and maintain the server side of our website. The job includes working with databases, creating APIs, and making sure the website works fast and securely.",
+    },
+    "data-analyst": {
+        title: "Data Analyst Developer",
+        company: "Sprints",
+        salary: "$7000",
+        experience: "1 year",
+        status: "Open",
+        description:
+            "The Data Analyst collects and studies data to help the company make better decisions. They organize information, find patterns in the data, and create reports.",
+    },
+    "ui-ux": {
+        title: "UI/UX Designer",
+        company: "Google",
+        salary: "$15000",
+        experience: "4 years",
+        status: "Open",
+        description:
+            "The UI/UX Designer creates easy and attractive designs for websites and apps. They focus on making the interface simple, clear, and enjoyable for users.",
+    },
+    "full-stack": {
+        title: "Full Stack Developer",
+        company: "Nvidia",
+        salary: "$15000",
+        experience: "5 years",
+        status: "Open",
+        description:
+            "The Full Stack Developer works on both the front end and back end of a website. They build user interfaces, manage servers and databases, and make sure the whole application works correctly.",
+    },
+    "cyber-security": {
+        title: "Cyber Security Engineer",
+        company: "Cyshield",
+        salary: "$20000",
+        experience: "6+ years",
+        status: "Open",
+        description:
+            "The Cybersecurity Engineer protects the company's systems and data from cyber attacks. They monitor security, find vulnerabilities, and make sure the network and applications are safe.",
+    },
+};
+
+// ========================================
+// FEATURED JOBS (index.html)
+// ========================================
+function renderFeaturedJobs() {
+    const grid = document.querySelector(".featured-jobs-grid");
+    if (!grid || !window.JOBS_CATALOG) return;
+
+    const FEATURED_LIMIT = 4;
+    const openJobs = Object.entries(window.JOBS_CATALOG).filter(
+        ([, job]) => job.status === "Open"
+    );
+    const featured = openJobs.slice(0, FEATURED_LIMIT);
+
+    grid.innerHTML = "";
+
+    if (!featured.length) {
+        grid.innerHTML =
+            '<p class="featured-empty">No open jobs to feature right now. <a href="jobs.html">Browse all jobs</a>.</p>';
+        return;
+    }
+
+    featured.forEach(([id, job]) => {
+        const card = document.createElement("div");
+        card.className = "job-card";
+
+        const title = document.createElement("h3");
+        title.textContent = job.title;
+
+        const company = document.createElement("span");
+        company.className = "company";
+        company.textContent = "Company: " + job.company;
+
+        const salary = document.createElement("span");
+        salary.className = "salary";
+        salary.textContent = job.salary;
+
+        const experience = document.createElement("span");
+        experience.className = "experience";
+        experience.textContent = job.experience + " experience";
+
+        const link = document.createElement("a");
+        link.href = "job-details.html";
+        link.className = "btn";
+        link.textContent = "View Details";
+        link.addEventListener("click", function (e) {
+            e.preventDefault();
+            localStorage.setItem("selectedJob", id);
+            window.location.href = "job-details.html";
+        });
+
+        card.appendChild(title);
+        card.appendChild(company);
+        card.appendChild(salary);
+        card.appendChild(experience);
+        card.appendChild(link);
+        grid.appendChild(card);
+    });
+}
+
+// ========================================
 // DYNAMIC NAVBAR MANAGEMENT
 // ========================================
 
@@ -110,9 +229,10 @@ function highlightCurrentPage() {
     });
 }
 
-// 5. Logout Function
+// 5. Logout Function (clear session only — keep registeredUser / appliedJobs)
 function logout() {
-    localStorage.clear();
+    localStorage.removeItem('username');
+    localStorage.removeItem('userType');
     userData.isLoggedIn = false;
     userData.username = null;
     userData.userType = null;
@@ -122,9 +242,7 @@ function logout() {
 
 // 6. Initialize Page
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOMContentLoaded - Rendering Navigation');
-    console.log('User Data:', userData);
     renderNavigation();
-    console.log('Navigation rendered');
+    renderFeaturedJobs();
 });
 

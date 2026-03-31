@@ -14,16 +14,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
             
-            // Retrieve the stored user from signup
-            const storedUser = JSON.parse(localStorage.getItem("registeredUser"));
-            
-            if (!storedUser) {
+            const raw = localStorage.getItem("registeredUser");
+            if (!raw) {
                 alert("No registered users found. Please sign up first.");
                 return;
             }
-            
-            // Check if credentials match
-            if (usernameInput === storedUser.username && passwordInput === storedUser.password) {
+
+            let storedUser;
+            try {
+                storedUser = JSON.parse(raw);
+            } catch {
+                alert("Saved account data is damaged. Please sign up again.");
+                return;
+            }
+
+            if (!storedUser || !storedUser.username) {
+                alert("No registered users found. Please sign up first.");
+                return;
+            }
+
+            const storedUserNorm = String(storedUser.username).trim();
+            const storedPass = String(storedUser.password ?? "");
+            if (usernameInput === storedUserNorm && passwordInput === storedPass) {
                 // Save login info to localStorage
                 localStorage.setItem("username", storedUser.username);
                 localStorage.setItem("userType", storedUser.userType || "user"); // Default to 'user'
