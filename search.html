@@ -38,7 +38,7 @@
     <h1>Explore Jobs</h1>
     <p>Search for a job that matches your skills.</p>
 
-    <form action="jobs.html" method="get" id="jobSearchForm" novalidate>
+    <form action="jobs.html" method="get" id="jobSearchForm" novalidate onsubmit="return validateAndSearch()">
         
         <!-- Job Title -->
         <div class="form-group">
