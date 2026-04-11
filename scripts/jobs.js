@@ -1,75 +1,129 @@
-let detailsLinks = document.getElementsByClassName("view-details");
+// ========================================
+// LOAD JOBS FROM LOCALSTORAGE INTO THE PAGE
+// ========================================
+function renderJobsFromCatalog() {
+    let catalog = {};
+    try {
+        const raw = localStorage.getItem("JOBS_CATALOG");
+        if (raw) catalog = JSON.parse(raw);
+    } catch (err) {
+        catalog = {};
+    }
 
-for (var i = 0; i < detailsLinks.length; i++) {
-    detailsLinks[i].addEventListener("click", function(event) {
+    const jobsContainer = document.querySelector(".Job-List");
+    if (!jobsContainer) return;
 
-        // Stop normal link behavior
-        event.preventDefault();
+    Object.entries(catalog).forEach(([id, job]) => {
+        // Avoid duplicates if card already exists in HTML
+        if (document.getElementById(id)) return;
 
-        // Get parent job card
-        let jobCard = this.closest(".job-det");
+        const card = document.createElement("article");
+        card.className = "job-det";
+        card.id = id;
 
-        // Get job id
-        let jobId = jobCard.id;
+        card.innerHTML = `
+            <h2>${job.title}</h2>
+            <p>Company: ${job.company}</p>
+            <p>Salary: ${job.salary}</p>
+            <p>Experience: ${job.experience}</p>
+            <p class="status">Status: ${job.status}</p>
+            <a href="job-details.html" class="view-details">View Details</a>
+            <button class="apply-btn">Apply</button>
+        `;
 
-        // Save it in localStorage
-        localStorage.setItem("selectedJob", jobId);
-
-        //  Go to details page
-        window.location.href = "job-details.html";
+        jobsContainer.appendChild(card);
     });
+
+    // Re-attach listeners so new cards are interactive
+    attachJobListeners();
 }
 
-let applybtn = document.getElementsByClassName("apply-btn");
 
-for (var x = 0; x < applybtn.length; x++) {
-    applybtn[x].addEventListener("click", function(event) {
+// ========================================
+// VIEW DETAILS & APPLY LISTENERS
+// ========================================
+function attachJobListeners() {
 
-        // CHECK IF USER IS LOGGED IN
-        const isLoggedIn = localStorage.getItem("username");
-        if (!isLoggedIn) {
-            alert("Please log in to apply for jobs");
-            window.location.href = "login.html";
-            return;
-        }
+    // --- View Details ---
+    let detailsLinks = document.getElementsByClassName("view-details");
 
-        let jobCard = this.closest(".job-det");
+    for (var i = 0; i < detailsLinks.length; i++) {
+        // Remove old listener by cloning the element
+        let oldLink = detailsLinks[i];
+        let newLink = oldLink.cloneNode(true);
+        oldLink.parentNode.replaceChild(newLink, oldLink);
+    }
 
-        let jobId = jobCard.id;
+    // Re-fetch after cloning
+    detailsLinks = document.getElementsByClassName("view-details");
+    for (var i = 0; i < detailsLinks.length; i++) {
+        detailsLinks[i].addEventListener("click", function (event) {
+            event.preventDefault();
 
-        // get status element inside the card
-        let statusElement = jobCard.querySelector(".status");
+            let jobCard = this.closest(".job-det");
+            let jobId = jobCard.id;
 
-        // get the text
-        let statusText = statusElement.textContent;
+            localStorage.setItem("selectedJob", jobId);
+            window.location.href = "job-details.html";
+        });
+    }
 
-        // check if closed
-        if (statusText.includes("Closed")) {
-            alert("This job is closed at the moment, try again later");
-            return;
-        }
-        else if (statusText.includes("Open")){
-            let appliedJobs = localStorage.getItem("appliedJobs");
+    // --- Apply Button ---
+    let applyBtns = document.getElementsByClassName("apply-btn");
 
-            if (appliedJobs === null) {
-                appliedJobs = [];
-            } else {
-                appliedJobs = JSON.parse(appliedJobs);
-            }
+    for (var x = 0; x < applyBtns.length; x++) {
+        let oldBtn = applyBtns[x];
+        let newBtn = oldBtn.cloneNode(true);
+        oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+    }
 
-            if (appliedJobs.includes(jobId)) {
-                alert("You already applied for this job");
+    // Re-fetch after cloning
+    applyBtns = document.getElementsByClassName("apply-btn");
+    for (var x = 0; x < applyBtns.length; x++) {
+        applyBtns[x].addEventListener("click", function (event) {
+
+            // Check if user is logged in
+            const isLoggedIn = localStorage.getItem("username");
+            if (!isLoggedIn) {
+                alert("Please log in to apply for jobs");
+                window.location.href = "login.html";
                 return;
             }
 
-            appliedJobs.push(jobId);
+            let jobCard = this.closest(".job-det");
+            let jobId = jobCard.id;
+            let statusElement = jobCard.querySelector(".status");
+            let statusText = statusElement.textContent;
 
-            localStorage.setItem("appliedJobs", JSON.stringify(appliedJobs));
+            if (statusText.includes("Closed")) {
+                alert("This job is closed at the moment, try again later");
+                return;
+            } else if (statusText.includes("Open")) {
+                let appliedJobs = localStorage.getItem("appliedJobs");
 
-            alert("Applied successfully");
-        }
-        
+                if (appliedJobs === null) {
+                    appliedJobs = [];
+                } else {
+                    appliedJobs = JSON.parse(appliedJobs);
+                }
 
-        
-    });
+                if (appliedJobs.includes(jobId)) {
+                    alert("You already applied for this job");
+                    return;
+                }
+
+                appliedJobs.push(jobId);
+                localStorage.setItem("appliedJobs", JSON.stringify(appliedJobs));
+                alert("Applied successfully");
+            }
+        });
+    }
 }
+
+
+// ========================================
+// INIT
+// ========================================
+document.addEventListener("DOMContentLoaded", () => {
+    renderJobsFromCatalog(); // Loads saved jobs + attaches all listeners
+});
