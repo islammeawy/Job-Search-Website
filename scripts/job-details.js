@@ -72,6 +72,14 @@ if (job) {
 let applyBtn = document.getElementById("apply-btn");
 
 if (applyBtn) applyBtn.addEventListener("click", function () {
+    // CHECK IF USER IS LOGGED IN
+    const isLoggedIn = localStorage.getItem("username");
+    if (!isLoggedIn) {
+        alert("Please log in to apply for jobs");
+        window.location.href = "login.html";
+        return;
+    }
+
     if (!job) {
         alert("No job selected");
         return;

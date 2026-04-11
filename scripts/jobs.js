@@ -25,6 +25,14 @@ let applybtn = document.getElementsByClassName("apply-btn");
 for (var x = 0; x < applybtn.length; x++) {
     applybtn[x].addEventListener("click", function(event) {
 
+        // CHECK IF USER IS LOGGED IN
+        const isLoggedIn = localStorage.getItem("username");
+        if (!isLoggedIn) {
+            alert("Please log in to apply for jobs");
+            window.location.href = "login.html";
+            return;
+        }
+
         let jobCard = this.closest(".job-det");
 
         let jobId = jobCard.id;
