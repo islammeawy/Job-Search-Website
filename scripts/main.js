@@ -1,6 +1,3 @@
-// ========================================
-// JOB CATALOG (ids match jobs.html / selectedJob)
-// ========================================
 window.JOBS_CATALOG = {
     frontend: {
         title: "Frontend Developer",
@@ -114,6 +111,94 @@ function renderFeaturedJobs() {
         card.appendChild(experience);
         card.appendChild(link);
         grid.appendChild(card);
+    });
+}
+
+// ========================================
+// BROWSE BY EXPERIENCE (Dynamic Job Counts)
+// ========================================
+function renderExperienceSection() {
+    const experienceContainer = document.querySelector('.experience-categories');
+    if (!experienceContainer) return;
+
+    // Get all jobs (hardcoded + admin-added)
+    let allJobs = [...Object.values(window.JOBS_CATALOG)];
+    
+    // Also load jobs from localStorage JOBS_CATALOG (admin-added jobs)
+    let adminJobs = localStorage.getItem('JOBS_CATALOG');
+    if (adminJobs) {
+        try {
+            const catalogData = JSON.parse(adminJobs);
+            if (typeof catalogData === 'object' && !Array.isArray(catalogData)) {
+                allJobs = allJobs.concat(Object.values(catalogData));
+            } else if (Array.isArray(catalogData)) {
+                allJobs = allJobs.concat(catalogData);
+            }
+        } catch (error) {
+            console.error('Error loading admin jobs:', error);
+        }
+    }
+
+    // Define experience levels with their criteria
+    const experienceLevels = [
+        {
+            title: 'Entry Level',
+            subtitle: '0-2 years experience',
+            image: 'images/enty-level-IT_1500x680.jfif',
+            filter: (job) => {
+                const exp = parseInt(job.experience) || 0;
+                return exp >= 0 && exp <= 2;
+            }
+        },
+        {
+            title: 'Mid Level',
+            subtitle: '2-5 years experience',
+            image: 'images/mid level.jpg',
+            filter: (job) => {
+                const exp = parseInt(job.experience) || 0;
+                return exp >= 2 && exp <= 5;
+            }
+        },
+        {
+            title: 'Senior Level',
+            subtitle: '5+ years experience',
+            image: 'images/senior.webp',
+            filter: (job) => {
+                const exp = parseInt(job.experience) || 0;
+                return exp >= 5;
+            }
+        },
+        {
+            title: 'Executive',
+            subtitle: '10+ years experience',
+            image: 'images/excecutive.jpg',
+            filter: (job) => {
+                const exp = parseInt(job.experience) || 0;
+                return exp >= 10;
+            }
+        }
+    ];
+
+    // Clear existing cards
+    experienceContainer.innerHTML = '';
+
+    // Create cards for each experience level
+    experienceLevels.forEach(level => {
+        // Count jobs for this level
+        const count = allJobs.filter(level.filter).length;
+
+        const card = document.createElement('div');
+        card.className = 'experience-card';
+
+        card.innerHTML = `
+            <img src="${level.image}" alt="${level.title} Jobs">
+            <h3>${level.title}</h3>
+            <p>${level.subtitle}</p>
+            <p class="job-count">${count}+ Jobs</p>
+            <a href="search.html" class="btn">Browse Jobs</a>
+        `;
+
+        experienceContainer.appendChild(card);
     });
 }
 
@@ -244,5 +329,6 @@ function logout() {
 document.addEventListener('DOMContentLoaded', function() {
     renderNavigation();
     renderFeaturedJobs();
+    renderExperienceSection();
 });
 

@@ -72,11 +72,18 @@ if (job) {
 let applyBtn = document.getElementById("apply-btn");
 
 if (applyBtn) applyBtn.addEventListener("click", function () {
-    // CHECK IF USER IS LOGGED IN
+    // Check if user is logged in
     const isLoggedIn = localStorage.getItem("username");
     if (!isLoggedIn) {
         alert("Please log in to apply for jobs");
         window.location.href = "login.html";
+        return;
+    }
+
+    // Check if user is admin
+    const userType = localStorage.getItem("userType");
+    if (userType === "admin") {
+        alert("Admins cannot apply for jobs");
         return;
     }
 

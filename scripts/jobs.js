@@ -285,12 +285,19 @@ function attachJobListeners() {
     applyBtns = document.getElementsByClassName("apply-btn");
     for (var x = 0; x < applyBtns.length; x++) {
         applyBtns[x].addEventListener("click", function (event) {
-
+            
             // Check if user is logged in
             const isLoggedIn = localStorage.getItem("username");
             if (!isLoggedIn) {
                 alert("Please log in to apply for jobs");
                 window.location.href = "login.html";
+                return;
+            }
+
+            // Check if user is admin
+            const userType = localStorage.getItem("userType");
+            if (userType === "admin") {
+                alert("Admins cannot apply for jobs");
                 return;
             }
 
