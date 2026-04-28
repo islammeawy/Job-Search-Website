@@ -7,6 +7,17 @@ from django.db import models
 class User(AbstractUser):
     is_company_admin = models.BooleanField(default=False)
     company_name = models.CharField(max_length=200, blank=True, null=True)
+    
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='jobs_user_groups',
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='jobs_user_permissions',
+        blank=True
+    )
 
 class Job(models.Model):
     STATUS_CHOICES = [('open', 'Open'), ('closed', 'Closed')]
