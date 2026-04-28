@@ -1,0 +1,105 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Job Search Website{% endblock %}</title>
+  <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block styles %}{% endblock %}
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="logo-image">
+        <img class="logo-img" src="{% static 'images/logo.jpg' %}" alt="logo-image">
+      </div>
+      <div>
+        <nav class="navbar">
+          <ul class="nav-links">
+          </ul>
+        </nav>
+      </div>
+
+      <div class="nav-actions"></div>
+    </div>
+  </header>
+  <main>
+    {% block content %}
+    <!-- Page content will go here -->
+    {% endblock %}
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <div class="footer-logo">
+          <img class="logo-image" src="{% static 'images/logo.jpg' %}" alt="Logo" height="60px" width="60px">
+        </div>
+        <p class="footer-desc">
+          JobFinder is your go-to platform for finding the perfect job.
+          <br>
+          We connect job seekers with top employers, making the job search process easier and more efficient. Whether
+          you're looking for your first job or your next career move, JobFinder has you covered.
+        </p>
+        <div class="footer-socials">
+          <a href="#"><img src="{% static 'icons/x.jpg' %}" alt="Twitter" height="60px" width="60px"></a>
+          <a href="#"><img src="{% static 'icons/discord.png' %}" alt="discord" height="60px" width="60px"></a>
+          <a href="#"><img src="{% static 'icons/linkedin.png' %}" alt="LinkedIn" height="60px" width="60px"></a>
+        </div>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-links">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#integrations">Integrations</a>
+          <a href="#">API</a>
+        </div>
+        <div class="footer-links">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Blog</a>
+          <a href="#">Careers</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-links">
+          <h4>Legal</h4>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Security</a>
+        </div>
+      </div>
+    </div>
+    <p class="footer-copyright">
+      &copy; 2025 . All rights reserved.
+    </p>
+  </footer>
+  
+  <!-- Django URL Mapping for JavaScript -->
+  <script>
+    window.DJANGO_URLS = {
+      home: "{% url 'home' %}",
+      login: "{% url 'login' %}",
+      signup: "{% url 'signup' %}",
+      logout: "{% url 'logout' %}",
+      jobs: "{% url 'job_list' %}",
+      job_details: "{% url 'job_details' args='0' %}".replace('/0/', '/'),
+      add_job: "{% url 'add_job' %}",
+      edit_job: "{% url 'edit_job' args='0' %}".replace('/0/', '/'),
+      delete_job: "{% url 'delete_job' args='0' %}".replace('/0/', '/'),
+      apply_job: "{% url 'apply_job' args='0' %}".replace('/0/', '/'),
+      applied: "{% url 'applied' %}",
+      my_jobs: "{% url 'my_jobs' %}",
+      search: "{% url 'search' %}"
+    };
+  </script>
+  
+  <script src="{% static 'scripts/main.js' %}"></script>
+{% block scripts %}{% endblock %}
+
+</body>
+
+</html>

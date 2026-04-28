@@ -96,13 +96,16 @@ function renderFeaturedJobs() {
         experience.textContent = job.experience + " experience";
 
         const link = document.createElement("a");
-        link.href = "job-details.html";
+        // For now, create a placeholder - we'll update this when jobs are fetched from Django
+        link.href = "#";
         link.className = "btn";
         link.textContent = "View Details";
         link.addEventListener("click", function (e) {
             e.preventDefault();
             localStorage.setItem("selectedJob", id);
-            window.location.href = "job-details.html";
+            // In a real Django integration, this would fetch the job ID from the database
+            // For now, using localStorage-based ID
+            window.location.href = window.DJANGO_URLS.job_details + id + '/';
         });
 
         card.appendChild(title);
@@ -195,7 +198,7 @@ function renderExperienceSection() {
             <h3>${level.title}</h3>
             <p>${level.subtitle}</p>
             <p class="job-count">${count}+ Jobs</p>
-            <a href="search.html" class="btn">Browse Jobs</a>
+            <a href="${window.DJANGO_URLS.search}" class="btn">Browse Jobs</a>
         `;
 
         experienceContainer.appendChild(card);
@@ -218,27 +221,27 @@ function buildNavLinks() {
     if (!userData.isLoggedIn) {
         // NOT LOGGED IN: Show Home, Jobs, Search, Login, Sign Up
         return [
-            { text: 'Home', href: 'index.html', isButton: false },
-            { text: 'Jobs', href: 'jobs.html', isButton: false },
-            { text: 'Search', href: 'search.html', isButton: false },
-            { text: 'Login', href: 'login.html', isButton: true, buttonClass: 'btn-primary' },
-            { text: 'Sign Up', href: 'signup.html', isButton: true, buttonClass: 'btn-secondary' }
+            { text: 'Home', href: window.DJANGO_URLS.home, isButton: false },
+            { text: 'Jobs', href: window.DJANGO_URLS.jobs, isButton: false },
+            { text: 'Search', href: window.DJANGO_URLS.search, isButton: false },
+            { text: 'Login', href: window.DJANGO_URLS.login, isButton: true, buttonClass: 'btn-primary' },
+            { text: 'Sign Up', href: window.DJANGO_URLS.signup, isButton: true, buttonClass: 'btn-secondary' }
         ];
     } else if (userData.userType === 'user') {
         // USER LOGGED IN: Show Home, Jobs, Search, Applied Jobs, Logout
         return [
-            { text: 'Home', href: 'index.html', isButton: false },
-            { text: 'Jobs', href: 'jobs.html', isButton: false },
-            { text: 'Search', href: 'search.html', isButton: false },
-            { text: 'Applied Jobs', href: 'applied.html', isButton: false },
+            { text: 'Home', href: window.DJANGO_URLS.home, isButton: false },
+            { text: 'Jobs', href: window.DJANGO_URLS.jobs, isButton: false },
+            { text: 'Search', href: window.DJANGO_URLS.search, isButton: false },
+            { text: 'Applied Jobs', href: window.DJANGO_URLS.applied, isButton: false },
             { text: 'Logout', href: '#', isButton: true, buttonClass: 'btn-primary', action: 'logout' }
         ];
     } else if (userData.userType === 'admin') {
         // ADMIN LOGGED IN: Show Home, My Jobs, Add Job, Logout
         return [
-            { text: 'Home', href: 'index.html', isButton: false },
-            { text: 'My Jobs', href: 'my-jobs.html', isButton: false },
-            { text: 'Add Job', href: 'add-job.html', isButton: false },
+            { text: 'Home', href: window.DJANGO_URLS.home, isButton: false },
+            { text: 'My Jobs', href: window.DJANGO_URLS.my_jobs, isButton: false },
+            { text: 'Add Job', href: window.DJANGO_URLS.add_job, isButton: false },
             { text: 'Logout', href: '#', isButton: true, buttonClass: 'btn-primary', action: 'logout' }
         ];
     }
@@ -322,7 +325,7 @@ function logout() {
     userData.username = null;
     userData.userType = null;
     alert('Logged out successfully!');
-    window.location.href = 'index.html';
+    window.location.href = window.DJANGO_URLS.home;
 }
 
 // 6. Initialize Page
