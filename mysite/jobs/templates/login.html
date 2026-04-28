@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - JobFinder</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-image">
+                <img class="logo-img" src="images/logo.jpg" alt="JobFinder Logo">
+            </div>
+            <div>
+                <nav class="navbar">
+                    <ul class="nav-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="jobs.html">Jobs</a></li>
+                        <li><a href="applied.html">Applied Jobs</a></li>
+                        <li><a href="search.html">Search</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <div class="nav-actions">
+                <a href="signup.html"><button>Sign Up</button></a>
+            </div>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <h2>Login to Your Account</h2>
+                <form id="loginForm" action="/login" method="post">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                    <br><br>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required style="width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px;">
+                    <br><br>
+                    <button type="submit" style="width: 100%;">Login</button>
+                </form>
+                <p style="text-align: center; margin-top: 20px;">
+                    Don't have an account? <a href="signup.html">Sign up here</a>
+                </p>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="footer-content">
+        <div class="footer-left">
+            <div class="footer-logo">
+                <img class="logo-image" src="images/logo.jpg" alt="Logo" 
+                height="60px"
+                width="60px"
+                >
+            </div>
+            <p class="footer-desc">
+              JobFinder is your go-to platform for finding the perfect job.
+                <br>
+                We connect job seekers with top employers, making the job search process easier and more efficient. Whether you're looking for your first job or your next career move, JobFinder has you covered.
+            </p>
+            <div class="footer-socials">
+                <a href="#"><img src="icons/x.jpg" alt="Twitter"
+                  height="60px"
+                width="60px"></a>
+                <a href="#"><img src="icons/discord.png" alt="discord"
+                  height="60px"
+                width="60px"></a>
+                <a href="#"><img src="icons/linkedin.png" alt="LinkedIn"
+                  height="60px"
+                width="60px"></a>
+            </div>
+        </div>
+        <div class="footer-links-group">
+            <div class="footer-links">
+                <h4>Product</h4>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#integrations">Integrations</a>
+                <a href="#">API</a>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Security</a>
+            </div>
+        </div>
+    </div>
+    <p class="footer-copyright">
+        &copy; 2025 . All rights reserved.
+    </p>
+</footer>
+    <script defer src="scripts/main.js"></script>
+    <script defer src="scripts/login.js"></script>
+</body>
+</html>

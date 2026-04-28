@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Jobs - JobFinder</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="container">
+        <div class="logo-image">
+            <img class="logo-img" src="images/logo.jpg" alt="JobFinder Logo">
+        </div>
+
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="applied.html">Applied Jobs</a></li>
+                <li><a href="search.html" aria-current="page">Search</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="login.html"><button type="button">Login</button></a>
+            <a href="signup.html"><button type="button">Sign Up</button></a>
+        </div>
+    </div>
+</header>
+
+<main>
+<section class="search-section">
+<div class="container">
+    <h1>Explore Jobs</h1>
+    <p>Search for a job that matches your skills.</p>
+
+    <form action="jobs.html" method="get" id="jobSearchForm" novalidate onsubmit="return validateAndSearch()">
+        
+        <!-- Job Title -->
+        <div class="form-group">
+            <label for="job_title">Job Title <span class="required">*</span></label>
+            <div class="input-wrapper">
+                <input 
+                    type="text" 
+                    id="job_title" 
+                    name="job_title" 
+                    placeholder="e.g., Developer, Designer, Manager"
+                    aria-describedby="job-error job-hint"
+                    autocomplete="off"
+                    required
+                >
+                <span id="char-count" class="char-count" aria-live="polite">0/100</span>
+            </div>
+            <small id="job-hint" class="hint">Letters, numbers, and hyphens only</small>
+            <small id="job-error" class="error-message" role="alert"></small>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input 
+                type="text" 
+                id="location" 
+                name="location" 
+                placeholder="City, state, or 'Remote'"
+                autocomplete="address-level2"
+            >
+        </div>
+
+        <!-- Job Type -->
+        <div class="form-group">
+            <fieldset>
+                <legend>Job Type</legend>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="job_type" value="full-time">
+                        Full-time
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="job_type" value="part-time">
+                        Part-time
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="job_type" value="remote">
+                        Remote
+                    </label>
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- Experience -->
+        <div class="form-group">
+            <label for="experience">Years of Experience</label>
+            <select name="experience" id="experience" aria-label="Select years of experience">
+                <option value="">Any</option>
+                <option value="0-1">0 - 1 years</option>
+                <option value="2-4">2 - 4 years</option>
+                <option value="5+">5+ years</option>
+            </select>
+        </div>
+
+        <!-- Salary Range (Optional) -->
+        <div class="form-group">
+            <label for="salary">Minimum Salary (Optional)</label>
+            <input 
+                type="number" 
+                id="salary" 
+                name="salary" 
+                placeholder="e.g., 50000"
+                min="0"
+                step="1000"
+            >
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Find Jobs</button>
+            <button type="reset" class="btn btn-secondary">Clear Filters</button>
+        </div>
+
+        <div id="form-success" class="success-message" role="alert" aria-live="polite"></div>
+    </form>
+
+</div>
+</section>
+</main>
+
+<script defer src="scripts/main.js"></script>
+<script src="scripts/search.js"></script>
+</body>
+</html>
