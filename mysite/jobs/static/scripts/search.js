@@ -5,6 +5,7 @@ const charCountEl = document.getElementById("char-count");
 const successEl = document.getElementById("form-success");
 const locationEl = document.getElementById("location");
 const salaryEl = document.getElementById("salary");
+const experienceEl = document.getElementById("experience");
 
 function debounce(func, delay) {
     let timeoutId;
@@ -42,9 +43,9 @@ function validateJobTitle(title) {
     if (title.length > 100) {
         return "Job title cannot exceed 100 characters";
     }
-    // Regex validation
-    if (!/^[a-zA-Z0-9\s\-']+$/.test(title)) {
-        return "Job title can only contain letters, numbers, hyphens, and apostrophes";
+    // Updated regex to allow slashes for UI/UX
+    if (!/^[a-zA-Z0-9\s\-'/]+$/.test(title)) {
+        return "Job title can only contain letters, numbers, hyphens, apostrophes, and slashes";
     }
     return null;
 }
@@ -68,6 +69,64 @@ function validateForm() {
     return true;
 }
 
+// ========================================
+// AJAX SEARCH FUNCTION
+// ========================================
+function handleSearch(event) {
+    event.preventDefault();
+    
+    // Validate first
+    if (!validateForm()) {
+        jobTitleEl.focus();
+        return false;
+    }
+
+    // Get form values
+    const jobTitle = jobTitleEl.value.trim();
+    const location = locationEl.value.trim();
+    const experience = experienceEl.value;
+    const salary = salaryEl.value;
+
+    // Show loading message
+    successEl.textContent = "Searching for jobs...";
+    successEl.style.display = "block";
+
+    // Build query string
+    const params = new URLSearchParams();
+    if (jobTitle) params.append('job_title', jobTitle);
+    if (location) params.append('location', location);
+    if (experience) params.append('experience', experience);
+    if (salary) params.append('salary', salary);
+
+    // Call backend API with AJAX
+    fetch(`/search/?${params.toString()}`, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'  // tells backend this is AJAX
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Store results in sessionStorage
+            sessionStorage.setItem('searchResults', JSON.stringify(data.jobs));
+            
+            // Redirect to jobs page
+            successEl.textContent = `Found ${data.count} job(s)! Redirecting...`;
+            setTimeout(() => {
+                window.location.href = '/jobs/';
+            }, 500);
+        } else {
+            showError("Search failed. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error('Search error:', error);
+        showError("Connection error. Please try again.");
+    });
+
+    return false;
+}
+
 // Character counter
 jobTitleEl.addEventListener("input", debounce(function () {
     updateCharCount();
@@ -75,16 +134,7 @@ jobTitleEl.addEventListener("input", debounce(function () {
 }, 200));
 
 // Form submission
-form.addEventListener("submit", function (e) {
-    if (!validateForm()) {
-        e.preventDefault();
-        jobTitleEl.focus();
-    } else {
-        // Show success feedback
-        successEl.textContent = "Searching for jobs...";
-        successEl.style.display = "block";
-    }
-});
+form.addEventListener("submit", handleSearch);
 
 // Reset form
 form.addEventListener("reset", function () {
