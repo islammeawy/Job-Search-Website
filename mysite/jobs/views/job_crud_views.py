@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required,require_http_methods
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 from jobs.models import Job, Application
 
 @login_required(login_url='login')
