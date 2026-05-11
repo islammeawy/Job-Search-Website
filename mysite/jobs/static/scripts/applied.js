@@ -1,130 +1,110 @@
-var allJobs = {
-    "frontend": {
-        title: "Frontend Developer",
-        company: "Google",
-        salary: "\$5000",
-        experience: "2 years",
-        status: "Open"
-    },
-    "backend": {
-        title: "Backend Developer",
-        company: "Microsoft",
-        salary: "\$10000",
-        experience: "3+ years",
-        status: "Closed"
-    },
-    "data-analyst": {
-        title: "Data Analyst Developer",
-        company: "Sprints",
-        salary: "\$7000",
-        experience: "1 year",
-        status: "Open"
-    },
-    "ui-ux": {
-        title: "UI/UX Designer",
-        company: "Google",
-        salary: "\$15000",
-        experience: "4 years",
-        status: "Open"
-    },
-    "full-stack": {
-        title: "Full Stack Developer",
-        company: "Nvidia",
-        salary: "\$15000",
-        experience: "5 years",
-        status: "Open"
-    },
-    "cyber-security": {
-        title: "Cyber Security Engineer",
-        company: "Cyshield",
-        salary: "\$20000",
-        experience: "6+ years",
-        status: "Open"
-    }
-};
 
-// Get container
-let jobsList = document.getElementById("appliedJobsList");
-let emptyState = document.getElementById("emptyState");
+function displayAppliedJobs() {
+    const jobsList = document.getElementById("appliedJobsList");
+    const emptyState = document.getElementById("emptyState");
 
-// Load jobs when page opens
-function loadAppliedJobs() {
-    // Get data from localStorage
-    let appliedJobs = localStorage.getItem("appliedJobs");
-    
-    console.log("Applied Jobs Data:", appliedJobs);
-    
-    // Check if empty
-    if (appliedJobs === null || appliedJobs === "[]") {
-        jobsList.innerHTML = "";
-        emptyState.style.display = "block";
-        return;
-    }
+    // Fetch applied jobs from backend
+    fetch('/api/applied-jobs/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.applications.length > 0) {
+                jobsList.innerHTML = "";
+                emptyState.style.display = "none";
 
-    // Convert to array
-    let jobs = JSON.parse(appliedJobs);
-    
-    console.log("Parsed Jobs:", jobs);
-    
-    // Clear list
-    jobsList.innerHTML = "";
-    
-    // Loop and add each job
-    for (var i = 0; i < jobs.length; i++) {
-        var jobId = jobs[i];           // this is just a string like "frontend"
-        var job = allJobs[jobId];      // look up the actual job details
+                // Display each application
+                data.applications.forEach(app => {
+                    const card = document.createElement("div");
+                    card.className = "job-card";
+                    card.id = `app-${app.id}`;
 
-        if (!job) {
-            continue;  // skip if job not found
-        }
+                    card.innerHTML = `
+                        <h3>${app.job.title}</h3>
+                        <p><strong>Company:</strong> ${app.job.company_name}</p>
+                        <p><strong>Salary:</strong> ${app.job.salary}</p>
+                        <p><strong>Experience Required:</strong> ${app.job.years_of_experience} years</p>
+                        <p><strong>Applied On:</strong> ${new Date(app.applied_at).toLocaleDateString()}</p>
+                        <p><strong>Status:</strong> ${app.job.status}</p>
+                        <button class="withdraw-btn" data-app-id="${app.id}">Withdraw Application</button>
+                    `;
 
-        var html = '<div class="job-card">';
-        html += '<h3>' + job.title + '</h3>';
-        html += '<p><strong>Company:</strong> ' + job.company + '</p>';
-        html += '<p><strong>Salary:</strong> ' + job.salary + '</p>';
-        html += '<p><strong>Experience:</strong> ' + job.experience + '</p>';
-        html += '<p><strong>Status:</strong> ' + job.status + '</p>';
-        html += '<button class="withdraw-btn" data-id="' + jobId + '">Withdraw</button>';
-        html += '</div>';
+                    jobsList.appendChild(card);
+                });
 
-        jobsList.innerHTML += html;
-    }
-    
-    emptyState.style.display = "none";
-
-    attachWithdrawListeners();
+                // Attach withdraw listeners
+                attachWithdrawListeners();
+            } else {
+                // No applications
+                jobsList.innerHTML = "";
+                emptyState.style.display = "block";
+            }
+        })
+        .catch(error => {
+            console.error('Error loading applications:', error);
+            emptyState.style.display = "block";
+        });
 }
 
+// ATTACH WITHDRAW BUTTON LISTENERS
+
 function attachWithdrawListeners() {
-    var buttons = document.getElementsByClassName("withdraw-btn");
-    for (var i = 0; i < buttons.length; i++) {
+    const buttons = document.getElementsByClassName("withdraw-btn");
+
+    for (let i = 0; i < buttons.length; i++) {
         buttons[i].addEventListener("click", function () {
-            var jobId = this.getAttribute("data-id");
-            withdrawJob(jobId);
+            const appId = this.getAttribute("data-app-id");
+            withdrawApplication(appId);
         });
     }
 }
 
-// Withdraw job
-function withdrawJob(jobId) {
+// WITHDRAW AN APPLICATION
+
+function withdrawApplication(appId) {
     if (!confirm("Are you sure you want to withdraw this application?")) {
         return;
     }
 
-    var appliedJobs = localStorage.getItem("appliedJobs");
-    var jobs = JSON.parse(appliedJobs);
-
-    // Remove the job ID from array
-    var newJobs = [];
-    for (var i = 0; i < jobs.length; i++) {
-        if (jobs[i] !== jobId) {
-            newJobs.push(jobs[i]);
+    fetch(`/api/applications/${appId}/withdraw/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
         }
-    }
-
-    localStorage.setItem("appliedJobs", JSON.stringify(newJobs));
-    loadAppliedJobs();
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Application withdrawn successfully");
+            displayAppliedJobs();  // Refresh the list
+        } else {
+            alert(data.message || "Could not withdraw application");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred. Please try again.");
+    });
 }
 
-// Run when page loads
-loadAppliedJobs();
+
+// GET CSRF TOKEN FROM COOKIES
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Load when page opens
+document.addEventListener("DOMContentLoaded", function () {
+    displayAppliedJobs();
+});
