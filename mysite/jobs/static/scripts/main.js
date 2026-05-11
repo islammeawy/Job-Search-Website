@@ -72,7 +72,7 @@ function renderFeaturedJobs() {
 
     if (!featured.length) {
         grid.innerHTML =
-            '<p class="featured-empty">No open jobs to feature right now. <a href="jobs.html">Browse all jobs</a>.</p>';
+            '<p class="featured-empty">No open jobs to feature right now. <a href="/jobs/">Browse all jobs</a>.</p>';
         return;
     }
 
@@ -126,7 +126,7 @@ function renderExperienceSection() {
 
     // Get all jobs (hardcoded + admin-added)
     let allJobs = [...Object.values(window.JOBS_CATALOG)];
-    
+
     // Also load jobs from localStorage JOBS_CATALOG (admin-added jobs)
     let adminJobs = localStorage.getItem('JOBS_CATALOG');
     if (adminJobs) {
@@ -251,24 +251,24 @@ function buildNavLinks() {
 function renderNavigation() {
     const navLinksContainer = document.querySelector('.nav-links');
     const authContainer = document.querySelector('.nav-actions');
-    
+
     if (!navLinksContainer || !authContainer) {
         console.warn('Navigation containers not found in DOM (.nav-links or .nav-actions missing)');
         return;
     }
 
     const links = buildNavLinks();
-    
+
     // Clear existing nav links completely
     navLinksContainer.innerHTML = '';
-    
+
     // Clear auth container
     authContainer.innerHTML = '';
-    
+
     // Separate links and buttons
     const navItems = links.filter(link => !link.isButton);
     const authButtons = links.filter(link => link.isButton);
-    
+
     // Add all nav items to navbar (Home, Jobs, Search, etc.)
     navItems.forEach(item => {
         const li = document.createElement('li');
@@ -278,38 +278,38 @@ function renderNavigation() {
         li.appendChild(a);
         navLinksContainer.appendChild(li);
     });
-    
+
     // Add auth buttons to right side
     authButtons.forEach(item => {
         const a = document.createElement('a');
         a.href = item.href;
-        
+
         const button = document.createElement('button');
         button.textContent = item.text;
-        
+
         if (item.action === 'logout') {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 logout();
             });
         }
-        
+
         a.appendChild(button);
         authContainer.appendChild(a);
     });
-    
+
     // Highlight current page
     highlightCurrentPage();
 }
 
 // 4. Highlight Current Page
 function highlightCurrentPage() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
     const navLinks = document.querySelectorAll('.nav-links a');
-    
+
     navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === currentPage) {
+        const href = link.getAttribute('href').replace(/\/$/, '') || '/';
+        if (href === currentPath) {
             link.style.color = '#007BFF';
             link.style.borderBottom = '2px solid #007BFF';
             link.style.paddingBottom = '5px';
@@ -329,7 +329,7 @@ function logout() {
 }
 
 // 6. Initialize Page
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     renderNavigation();
     renderFeaturedJobs();
     renderExperienceSection();

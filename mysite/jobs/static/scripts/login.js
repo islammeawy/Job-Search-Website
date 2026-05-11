@@ -4,16 +4,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (loginForm) {
         loginForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            
+
             const usernameInput = document.getElementById("username").value.trim();
             const passwordInput = document.getElementById("password").value;
-            
+
             // Basic Validation
             if (!usernameInput || !passwordInput) {
                 alert("Please fill in all fields.");
                 return;
             }
-            
+
             const raw = localStorage.getItem("registeredUser");
             if (!raw) {
                 alert("No registered users found. Please sign up first.");
@@ -39,9 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Save login info to localStorage
                 localStorage.setItem("username", storedUser.username);
                 localStorage.setItem("userType", storedUser.userType || "user"); // Default to 'user'
-                
+
                 alert(`Welcome back, ${storedUser.fullname}!`);
-                window.location.href = "index.html";
+                window.location.href = "/";
             } else {
                 alert("Invalid username or password.");
             }

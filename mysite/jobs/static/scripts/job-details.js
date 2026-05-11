@@ -1,4 +1,15 @@
-let selectedJob = localStorage.getItem("selectedJob");
+function getSelectedJobId() {
+    let jobId = localStorage.getItem("selectedJob");
+    if (!jobId) {
+        const segments = window.location.pathname.split('/').filter(Boolean);
+        if (segments.length >= 2 && segments[0] === 'jobs') {
+            jobId = segments[1];
+        }
+    }
+    return jobId;
+}
+
+let selectedJob = getSelectedJobId();
 
 let jobs = {
     "frontend": {
@@ -66,7 +77,7 @@ if (job) {
     document.getElementById("job-status").textContent = "Status: " + job.status;
     document.getElementById("job-description").textContent = job.description;
 } else {
-    document.getElementById("job-container").innerHTML = "<h2>Job not found</h2><a href='jobs.html'>Back to Jobs</a>";
+    document.getElementById("job-container").innerHTML = "<h2>Job not found</h2><a href='/jobs/'>Back to Jobs</a>";
 }
 
 let applyBtn = document.getElementById("apply-btn");
@@ -76,7 +87,7 @@ if (applyBtn) applyBtn.addEventListener("click", function () {
     const isLoggedIn = localStorage.getItem("username");
     if (!isLoggedIn) {
         alert("Please log in to apply for jobs");
-        window.location.href = "login.html";
+        window.location.href = "/login/";
         return;
     }
 

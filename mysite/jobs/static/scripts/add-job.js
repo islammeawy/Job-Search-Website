@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const userType = localStorage.getItem("userType");
     if (!localStorage.getItem("username")) {
         // Not logged in — redirect to login
-        window.location.href = "login.html";
+        window.location.href = "/login/";
         return;
     }
     if (userType !== "admin") {
@@ -41,8 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
         notAdminBanner.style.display = "block";
         notAdminBanner.innerHTML =
             "&#9888; You do not have permission to post jobs. " +
-            "<a href='jobs.html'>Browse Jobs</a> or " +
-            "<a href='index.html'>Go Home</a>.";
+            "<a href='/jobs/'>Browse Jobs</a> or " +
+            "<a href='/'>Go Home</a>.";
         form.parentNode.insertBefore(notAdminBanner, form);
         form.style.display = "none";
         return;
@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Redirect after a brief delay
         setTimeout(() => {
-            window.location.href = "my-jobs.html";
+            window.location.href = "/my-jobs/";
         }, 1500);
     });
 

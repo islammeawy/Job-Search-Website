@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Auth Guard: Only admins can edit jobs ---
     if (!localStorage.getItem("username")) {
-        window.location.href = "login.html";
+        window.location.href = "/login/";
         return;
     }
     if (localStorage.getItem("userType") !== "admin") {
@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
         noPermBanner.style.display = "block";
         noPermBanner.innerHTML =
             "&#9888; You do not have permission to edit jobs. " +
-            "<a href='jobs.html'>Browse Jobs</a> or " +
-            "<a href='index.html'>Go Home</a>.";
+            "<a href='/jobs/'>Browse Jobs</a> or " +
+            "<a href='/'>Go Home</a>.";
         form.parentNode.insertBefore(noPermBanner, form);
         form.style.display = "none";
         return;
@@ -254,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const parsed = JSON.parse(raw);
                 existingEntry = parsed[editJobId] || {};
             }
-        } catch (_) {}
+        } catch (_) { }
 
         const updatedJob = {
             title: fields.job_title.value.trim(),
@@ -301,7 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Clean up and redirect
         setTimeout(() => {
             localStorage.removeItem("editJobId");
-            window.location.href = "my-jobs.html";
+            window.location.href = "/my-jobs/";
         }, 1500);
     });
 

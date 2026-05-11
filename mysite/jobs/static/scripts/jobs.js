@@ -207,7 +207,7 @@ function renderJobsFromCatalog() {
         // Avoid duplicates if card already exists in HTML
         if (document.getElementById(id)) return;
 
-                // Add to jobsData so search filtering works for this job too
+        // Add to jobsData so search filtering works for this job too
         jobsData[id] = {
             title: job.title || "",
             company: job.company || "",
@@ -216,7 +216,7 @@ function renderJobsFromCatalog() {
             type: job.type || "full-time",
             location: job.location || "",
             status: job.status || "Open"
-        };7410
+        }; 7410
 
         const card = document.createElement("article");
         card.className = "job-det";
@@ -228,7 +228,7 @@ function renderJobsFromCatalog() {
             <p>Salary: ${job.salary}</p>
             <p>Experience: ${job.experience}</p>
             <p class="status">Status: ${job.status}</p>
-            <a href="job-details.html" class="view-details">View Details</a>
+            <a href="#" class="view-details">View Details</a>
             <button class="apply-btn">Apply</button>
         `;
 
@@ -268,7 +268,7 @@ function attachJobListeners() {
             let jobId = jobCard.id;
 
             localStorage.setItem("selectedJob", jobId);
-            window.location.href = "job-details.html";
+            window.location.href = "/jobs/" + jobId + "/";
         });
     }
 
@@ -285,12 +285,12 @@ function attachJobListeners() {
     applyBtns = document.getElementsByClassName("apply-btn");
     for (var x = 0; x < applyBtns.length; x++) {
         applyBtns[x].addEventListener("click", function (event) {
-            
+
             // Check if user is logged in
             const isLoggedIn = localStorage.getItem("username");
             if (!isLoggedIn) {
                 alert("Please log in to apply for jobs");
-                window.location.href = "login.html";
+                window.location.href = "/login/";
                 return;
             }
 

@@ -29,18 +29,18 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Error: Please enter your Company Name.");
             return;
         }
-    // 3. Storing Values (Requirement: No hard-coded values)
-    // We simulate a database by saving the user object to LocalStorage
-    const userData = {
-        fullname: document.getElementById("fullname").value.trim(),
-        email: document.getElementById("email").value.trim(),
-        username: document.getElementById("username").value.trim(),
-        password: password,
-        userType: userType === 'company' ? 'admin' : 'user', // Convert to 'admin' or 'user'
-        company: companyName || "N/A"
-    };
-    localStorage.setItem("registeredUser", JSON.stringify(userData));
-    alert("Registration Successful! Redirecting to login...");
-    window.location.href = "login.html";
+        // 3. Storing Values (Requirement: No hard-coded values)
+        // We simulate a database by saving the user object to LocalStorage
+        const userData = {
+            fullname: document.getElementById("fullname").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            username: document.getElementById("username").value.trim(),
+            password: password,
+            userType: userType === 'company' ? 'admin' : 'user', // Convert to 'admin' or 'user'
+            company: companyName || "N/A"
+        };
+        localStorage.setItem("registeredUser", JSON.stringify(userData));
+        alert("Registration Successful! Redirecting to login...");
+        window.location.href = "/login/";
     });
 });
