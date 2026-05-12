@@ -216,7 +216,13 @@ def applied_jobs(request):
 def my_jobs(request):
     """View user's posted jobs (for company admins)"""
     jobs = Job.objects.filter(created_by=request.user)
-    return render(request, 'my-jobs.html', {'jobs': jobs})
+    open_jobs_count = jobs.filter(status='open').count()
+    closed_jobs_count = jobs.filter(status='closed').count()
+    return render(request, 'my-jobs.html', {
+        'jobs': jobs,
+        'open_jobs_count': open_jobs_count,
+        'closed_jobs_count': closed_jobs_count
+    })
 
 @require_http_methods(["GET"])
 def get_applied_jobs(request):

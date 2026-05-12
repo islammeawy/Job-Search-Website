@@ -27,6 +27,25 @@
     <h2>Featured Jobs</h2>
 
     <div class="featured-jobs-grid" aria-live="polite">
+      {% for job in jobs %}
+      <div class="job-card">
+        <div class="job-header">
+          <h3><a href="{% url 'job_details' job.id %}">{{ job.title }}</a></h3>
+          <p class="company-name">{{ job.company_name }}</p>
+        </div>
+        <div class="job-details">
+          <p><strong>Salary:</strong> ${{ job.salary|default:"Not specified" }}</p>
+          <p><strong>Experience:</strong> {{ job.years_of_experience }}+ years</p>
+          <p class="job-description">{{ job.description|truncatewords:20 }}</p>
+        </div>
+        <div class="job-footer">
+          <span class="status-badge {% if job.status == 'open' %}open{% else %}closed{% endif %}">{{ job.status|upper }}</span>
+          <a href="{% url 'job_details' job.id %}" class="btn btn-small">View Details</a>
+        </div>
+      </div>
+      {% empty %}
+      <p>No featured jobs available at the moment.</p>
+      {% endfor %}
     </div>
   </div>
 </section>

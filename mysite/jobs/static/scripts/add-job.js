@@ -28,25 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const charCount = document.getElementById("desc_char_count");
 
     // --- Auth Check: Only admins can add jobs ---
-    const userType = localStorage.getItem("userType");
-    if (!localStorage.getItem("username")) {
-        // Not logged in — redirect to login
-        window.location.href = "/login/";
-        return;
-    }
-    if (userType !== "admin") {
-        // Logged-in non-admin: show an error banner and hide the form
-        const notAdminBanner = document.createElement("div");
-        notAdminBanner.className = "error-banner";
-        notAdminBanner.style.display = "block";
-        notAdminBanner.innerHTML =
-            "&#9888; You do not have permission to post jobs. " +
-            "<a href='/jobs/'>Browse Jobs</a> or " +
-            "<a href='/'>Go Home</a>.";
-        form.parentNode.insertBefore(notAdminBanner, form);
-        form.style.display = "none";
-        return;
-    }
+    // Django @login_required and permission checks handle this server-side
+    // No localStorage auth needed here
 
     // --- Character counter for description ---
     if (fields.description && charCount) {
@@ -203,31 +186,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Store in localStorage under JOBS_CATALOG
         // Read existing catalog, add new job, write back
+        // DEPRECATED: Jobs are now saved to Django database via form submission
         let catalog = {};
-        try {
-            const raw = localStorage.getItem("JOBS_CATALOG");
-            if (raw) catalog = JSON.parse(raw);
-        } catch (err) {
-            catalog = {};
-        }
-
-        catalog[newJob.id] = {
-            title: newJob.title,
-            company: newJob.company,
-            salary: newJob.salary,
-            experience: newJob.experience,
-            status: newJob.status,
-            description: newJob.description,
-            createdAt: newJob.createdAt,
-            postedBy: localStorage.getItem("username") || "admin",
-        };
-
-        localStorage.setItem("JOBS_CATALOG", JSON.stringify(catalog));
-
-        // Also sync to window.JOBS_CATALOG for in-session consistency
-        if (window.JOBS_CATALOG) {
-            window.JOBS_CATALOG[newJob.id] = catalog[newJob.id];
-        }
 
         // Show success message
         if (successMsg) {
@@ -242,10 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
             submitBtn.style.opacity = "0.8";
         }
 
-        // Redirect after a brief delay
-        setTimeout(() => {
-            window.location.href = "/my-jobs/";
-        }, 1500);
+        // Django form submission will handle redirect after database save
     });
 
     // --- Reset handler ---

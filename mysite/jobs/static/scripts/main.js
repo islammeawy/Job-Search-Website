@@ -60,61 +60,11 @@ window.JOBS_CATALOG = {
 // ========================================
 function renderFeaturedJobs() {
     const grid = document.querySelector(".featured-jobs-grid");
-    if (!grid || !window.JOBS_CATALOG) return;
-
-    const FEATURED_LIMIT = 4;
-    const openJobs = Object.entries(window.JOBS_CATALOG).filter(
-        ([, job]) => job.status === "Open"
-    );
-    const featured = openJobs.slice(0, FEATURED_LIMIT);
-
-    grid.innerHTML = "";
-
-    if (!featured.length) {
-        grid.innerHTML =
-            '<p class="featured-empty">No open jobs to feature right now. <a href="/jobs/">Browse all jobs</a>.</p>';
-        return;
-    }
-
-    featured.forEach(([id, job]) => {
-        const card = document.createElement("div");
-        card.className = "job-card";
-
-        const title = document.createElement("h3");
-        title.textContent = job.title;
-
-        const company = document.createElement("span");
-        company.className = "company";
-        company.textContent = "Company: " + job.company;
-
-        const salary = document.createElement("span");
-        salary.className = "salary";
-        salary.textContent = job.salary;
-
-        const experience = document.createElement("span");
-        experience.className = "experience";
-        experience.textContent = job.experience + " experience";
-
-        const link = document.createElement("a");
-        // For now, create a placeholder - we'll update this when jobs are fetched from Django
-        link.href = "#";
-        link.className = "btn";
-        link.textContent = "View Details";
-        link.addEventListener("click", function (e) {
-            e.preventDefault();
-            localStorage.setItem("selectedJob", id);
-            // In a real Django integration, this would fetch the job ID from the database
-            // For now, using localStorage-based ID
-            window.location.href = window.DJANGO_URLS.job_details + id + '/';
-        });
-
-        card.appendChild(title);
-        card.appendChild(company);
-        card.appendChild(salary);
-        card.appendChild(experience);
-        card.appendChild(link);
-        grid.appendChild(card);
-    });
+    if (!grid) return;
+    
+    // Featured jobs are now rendered server-side in index.html template
+    // This function is kept for reference but no longer needed
+    return;
 }
 
 // ========================================
@@ -124,23 +74,9 @@ function renderExperienceSection() {
     const experienceContainer = document.querySelector('.experience-categories');
     if (!experienceContainer) return;
 
-    // Get all jobs (hardcoded + admin-added)
-    let allJobs = [...Object.values(window.JOBS_CATALOG)];
-
-    // Also load jobs from localStorage JOBS_CATALOG (admin-added jobs)
-    let adminJobs = localStorage.getItem('JOBS_CATALOG');
-    if (adminJobs) {
-        try {
-            const catalogData = JSON.parse(adminJobs);
-            if (typeof catalogData === 'object' && !Array.isArray(catalogData)) {
-                allJobs = allJobs.concat(Object.values(catalogData));
-            } else if (Array.isArray(catalogData)) {
-                allJobs = allJobs.concat(catalogData);
-            }
-        } catch (error) {
-            console.error('Error loading admin jobs:', error);
-        }
-    }
+    // Get all jobs from hardcoded JOBS_CATALOG (sample data only)
+    // Database jobs are rendered server-side in templates
+    let allJobs = Object.values(window.JOBS_CATALOG || {});
 
     // Define experience levels with their criteria
     const experienceLevels = [
@@ -208,125 +144,9 @@ function renderExperienceSection() {
 // ========================================
 // DYNAMIC NAVBAR MANAGEMENT
 // ========================================
-
-// 1. User Data Management
-const userData = {
-    username: localStorage.getItem('username') || null,
-    userType: localStorage.getItem('userType') || null, // 'user' or 'admin'
-    isLoggedIn: !!localStorage.getItem('username')
-};
-
-// 2. Build Dynamic Navigation Links
-function buildNavLinks() {
-    if (!userData.isLoggedIn) {
-        // NOT LOGGED IN: Show Home, Jobs, Search, Login, Sign Up
-        return [
-            { text: 'Home', href: window.DJANGO_URLS.home, isButton: false },
-            { text: 'Jobs', href: window.DJANGO_URLS.jobs, isButton: false },
-            { text: 'Search', href: window.DJANGO_URLS.search, isButton: false },
-            { text: 'Login', href: window.DJANGO_URLS.login, isButton: true, buttonClass: 'btn-primary' },
-            { text: 'Sign Up', href: window.DJANGO_URLS.signup, isButton: true, buttonClass: 'btn-secondary' }
-        ];
-    } else if (userData.userType === 'user') {
-        // USER LOGGED IN: Show Home, Jobs, Search, Applied Jobs, Logout
-        return [
-            { text: 'Home', href: window.DJANGO_URLS.home, isButton: false },
-            { text: 'Jobs', href: window.DJANGO_URLS.jobs, isButton: false },
-            { text: 'Search', href: window.DJANGO_URLS.search, isButton: false },
-            { text: 'Applied Jobs', href: window.DJANGO_URLS.applied, isButton: false },
-            { text: 'Logout', href: '#', isButton: true, buttonClass: 'btn-primary', action: 'logout' }
-        ];
-    } else if (userData.userType === 'admin') {
-        // ADMIN LOGGED IN: Show Home, My Jobs, Add Job, Logout
-        return [
-            { text: 'Home', href: window.DJANGO_URLS.home, isButton: false },
-            { text: 'My Jobs', href: window.DJANGO_URLS.my_jobs, isButton: false },
-            { text: 'Add Job', href: window.DJANGO_URLS.add_job, isButton: false },
-            { text: 'Logout', href: '#', isButton: true, buttonClass: 'btn-primary', action: 'logout' }
-        ];
-    }
-}
-
-// 3. Render Dynamic Navigation
-function renderNavigation() {
-    const navLinksContainer = document.querySelector('.nav-links');
-    const authContainer = document.querySelector('.nav-actions');
-
-    if (!navLinksContainer || !authContainer) {
-        console.warn('Navigation containers not found in DOM (.nav-links or .nav-actions missing)');
-        return;
-    }
-
-    const links = buildNavLinks();
-
-    // Clear existing nav links completely
-    navLinksContainer.innerHTML = '';
-
-    // Clear auth container
-    authContainer.innerHTML = '';
-
-    // Separate links and buttons
-    const navItems = links.filter(link => !link.isButton);
-    const authButtons = links.filter(link => link.isButton);
-
-    // Add all nav items to navbar (Home, Jobs, Search, etc.)
-    navItems.forEach(item => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = item.href;
-        a.textContent = item.text;
-        li.appendChild(a);
-        navLinksContainer.appendChild(li);
-    });
-
-    // Add auth buttons to right side
-    authButtons.forEach(item => {
-        const a = document.createElement('a');
-        a.href = item.href;
-
-        const button = document.createElement('button');
-        button.textContent = item.text;
-
-        if (item.action === 'logout') {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                logout();
-            });
-        }
-
-        a.appendChild(button);
-        authContainer.appendChild(a);
-    });
-
-    // Highlight current page
-    highlightCurrentPage();
-}
-
-// 4. Highlight Current Page
-function highlightCurrentPage() {
-    const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
-    const navLinks = document.querySelectorAll('.nav-links a');
-
-    navLinks.forEach(link => {
-        const href = link.getAttribute('href').replace(/\/$/, '') || '/';
-        if (href === currentPath) {
-            link.style.color = '#007BFF';
-            link.style.borderBottom = '2px solid #007BFF';
-            link.style.paddingBottom = '5px';
-        }
-    });
-}
-
-// 5. Logout Function (clear session only — keep registeredUser / appliedJobs)
-function logout() {
-    localStorage.removeItem('username');
-    localStorage.removeItem('userType');
-    userData.isLoggedIn = false;
-    userData.username = null;
-    userData.userType = null;
-    alert('Logged out successfully!');
-    window.location.href = window.DJANGO_URLS.home;
-}
+// Note: Navbar is now rendered server-side by Django templates (base.html)
+// Django template context provides user authentication state
+// No localStorage user data needed - use window.DJANGO_USER from template instead
 
 // 6. Initialize Page
 document.addEventListener('DOMContentLoaded', function () {

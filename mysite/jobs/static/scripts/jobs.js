@@ -268,7 +268,6 @@ function attachJobListeners() {
             let jobId = jobCard.id;
 
             localStorage.setItem("selectedJob", jobId);
-            window.location.href = "/jobs/" + jobId + "/";
         });
     }
 
@@ -286,17 +285,15 @@ function attachJobListeners() {
     for (var x = 0; x < applyBtns.length; x++) {
         applyBtns[x].addEventListener("click", function (event) {
 
-            // Check if user is logged in
-            const isLoggedIn = localStorage.getItem("username");
-            if (!isLoggedIn) {
+            // Check if user is logged in (use Django user context, not localStorage)
+            if (!window.DJANGO_USER || !window.DJANGO_USER.isAuthenticated) {
                 alert("Please log in to apply for jobs");
-                window.location.href = "/login/";
+                window.location.href = window.DJANGO_URLS.login;
                 return;
             }
 
-            // Check if user is admin
-            const userType = localStorage.getItem("userType");
-            if (userType === "admin") {
+            // Check if user is admin (admins don't apply for jobs)
+            if (window.DJANGO_USER.isAdmin) {
                 alert("Admins cannot apply for jobs");
                 return;
             }

@@ -21,11 +21,30 @@
       <div>
         <nav class="navbar">
           <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'job_list' %}">All Jobs</a></li>
+            {% if user.is_authenticated and user.is_company_admin %}
+            <li><a href="{% url 'my_jobs' %}">My Jobs</a></li>
+            {% endif %}
+            <li><a href="{% url 'search' %}">Search</a></li>
           </ul>
         </nav>
       </div>
 
-      <div class="nav-actions"></div>
+      <div class="nav-actions">
+        {% if user.is_authenticated %}
+          <span class="user-welcome">Welcome, {{ user.first_name|default:user.username }}</span>
+          {% if user.is_company_admin %}
+            <a href="{% url 'add_job' %}"><button class="btn-primary">Add Job</button></a>
+          {% else %}
+            <a href="{% url 'applied' %}"><button class="btn-primary">My Applications</button></a>
+          {% endif %}
+          <a href="{% url 'logout' %}"><button>Logout</button></a>
+        {% else %}
+          <a href="{% url 'login' %}"><button class="btn-primary">Login</button></a>
+          <a href="{% url 'signup' %}"><button>Sign Up</button></a>
+        {% endif %}
+      </div>
     </div>
   </header>
   <main>
@@ -94,6 +113,14 @@
         applied: "{% url 'applied' %}",
         my_jobs: "{% url 'my_jobs' %}",
         search: "{% url 'search' %}"
+      };
+
+      // Django User Context (replaces localStorage for user data)
+      window.DJANGO_USER = {
+        isAuthenticated: {{ user.is_authenticated|lower }},
+        username: "{{ user.username|default:'' }}",
+        isAdmin: {{ user.is_company_admin|lower }},
+        firstName: "{{ user.first_name|default:'' }}"
       };
     </script>
 

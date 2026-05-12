@@ -1,181 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
 
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Jobs - JobFinder</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
+{% block title %}My Jobs - JobFinder{% endblock %}
 
-<body>
+{% block content %}
 
-    <header>
-        <div class="container">
-            <div class="logo-image">
-                <img class="logo-img" src="{% static 'images/logo.jpg' %}" alt="JobFinder Logo">
+<section class="my-jobs-section">
+    <div class="container">
+        <h1>My Company Jobs</h1>
+        <p class="section-subtitle">Manage your company's job postings</p>
+
+        <div class="jobs-summary">
+            <div class="summary-card">
+                <h3>Total Jobs</h3>
+                <p class="count">{{ jobs|length }}</p>
             </div>
-
-            <nav class="navbar">
-                <ul class="nav-links">
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'job_list' %}">All Jobs</a></li>
-                    <li><a href="{% url 'my_jobs' %}">My Jobs</a></li>
-                    <li><a href="{% url 'search' %}">Search</a></li>
-                </ul>
-            </nav>
-
-            <div class="nav-actions">
-                <a href="{% url 'add_job' %}"><button class="btn-primary">Add New Job</button></a>
-                <a href="{% url 'logout' %}"><button>Logout</button></a>
+            <div class="summary-card">
+                <h3>Open Jobs</h3>
+                <p class="count">{{ open_jobs_count }}</p>
+            </div>
+            <div class="summary-card">
+                <h3>Closed Jobs</h3>
+                <p class="count">{{ closed_jobs_count }}</p>
             </div>
         </div>
-    </header>
 
-    <main>
-        <section class="my-jobs-section">
-            <div class="container">
-                <h1>My Company Jobs</h1>
-                <p class="section-subtitle">Manage your company's job postings</p>
-
-                <div class="jobs-summary">
-                    <div class="summary-card">
-                        <h3>Total Jobs</h3>
-                        <p class="count">6</p>
-                    </div>
-                    <div class="summary-card">
-                        <h3>Open Jobs</h3>
-                        <p class="count">5</p>
-                    </div>
-                    <div class="summary-card">
-                        <h3>Closed Jobs</h3>
-                        <p class="count">1</p>
-                    </div>
+        {% if jobs %}
+        <div class="my-jobs-list">
+            {% for job in jobs %}
+            <div class="job-card admin-card">
+                <div class="job-header">
+                    <h2>{{ job.title }}</h2>
+                    <span class="status-badge {% if job.status == 'open' %}open{% else %}closed{% endif %}">
+                        {{ job.status|upper }}
+                    </span>
                 </div>
-
-                <div class="my-jobs-list">
-
-                    <div class="job-card admin-card">
-                        <div class="job-header">
-                            <h2>Frontend Developer</h2>
-                            <span class="status-badge open">Open</span>
-                        </div>
-                        <p><strong>Salary:</strong> $5000</p>
-                        <p><strong>Experience Required:</strong> 2 years</p>
-                        <p><strong>Applications:</strong> 12</p>
-                        <p class="job-description">We are looking for a frontend developer with strong HTML, CSS, and
-                            JavaScript skills.</p>
-                        <div class="job-actions">
-                            <a href="#" class="btn">View Details</a>
-                            <a href="#" class="btn btn-secondary">Edit</a>
-                            <a href="#" class="btn btn-danger">Delete</a>
-                        </div>
-                    </div>
-
-
-                    <div class="job-card admin-card">
-                        <div class="job-header">
-                            <h2>Backend Developer</h2>
-                            <span class="status-badge open">Open</span>
-                        </div>
-                        <p><strong>Salary:</strong> $10000</p>
-                        <p><strong>Experience Required:</strong> 3+ years</p>
-                        <p><strong>Applications:</strong> 8</p>
-                        <p class="job-description">We are looking for a Backend Developer to build and maintain the
-                            server side of our website.</p>
-                        <div class="job-actions">
-                            <a href="#" class="btn">View Details</a>
-                            <a href="#" class="btn btn-secondary">Edit</a>
-                            <a href="#" class="btn btn-danger">Delete</a>
-                        </div>
-                    </div>
-
-
-
-
-
-
-                    <!-- Job Card 6 (Closed) -->
-                    <div class="job-card admin-card">
-                        <div class="job-header">
-                            <h2>Cyber Security Engineer</h2>
-                            <span class="status-badge closed">Closed</span>
-                        </div>
-                        <p><strong>Salary:</strong> $20000</p>
-                        <p><strong>Experience Required:</strong> 6+ years</p>
-                        <p><strong>Applications:</strong> 25</p>
-                        <p class="job-description">The Cybersecurity Engineer protects the company's systems and data
-                            from cyber attacks.</p>
-                        <div class="job-actions">
-                            <a href="#" class="btn">View Details</a>
-                            <a href="#" class="btn btn-secondary">Edit</a>
-                            <a href="#" class="btn btn-danger">Delete</a>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Empty State (shown when no jobs) -->
-                <div class="empty-state" style="display: none;">
-                    <h2>No jobs posted yet</h2>
-                    <p>Start by creating your first job posting</p>
-                    <a href="{% url 'add_job' %}" class="btn">Create First Job</a>
-                </div>
-
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-left">
-                <div class="footer-logo">
-                    <img class="logo-image" src="{% static 'images/logo.jpg' %}" alt="Logo" height="60px" width="60px">
-                </div>
-                <p class="footer-desc">
-                    JobFinder is your go-to platform for finding the perfect job.
-                    <br>
-                    We connect job seekers with top employers, making the job search process easier and more efficient.
-                    Whether you're looking for your first job or your next career move, JobFinder has you covered.
-                </p>
-                <div class="footer-socials">
-                    <a href="#"><img src="{% static 'icons/x.jpg' %}" alt="Twitter" height="60px" width="60px"></a>
-                    <a href="#"><img src="{% static 'icons/discord.png' %}" alt="discord" height="60px"
-                            width="60px"></a>
-                    <a href="#"><img src="{% static 'icons/linkedin.png' %}" alt="LinkedIn" height="60px"
-                            width="60px"></a>
+                <p><strong>Salary:</strong> ${{ job.salary|default:"Not specified" }}</p>
+                <p><strong>Experience Required:</strong> {{ job.years_of_experience }} years</p>
+                <p><strong>Applications:</strong> {{ job.applications.count }}</p>
+                <p class="job-description">{{ job.description }}</p>
+                <div class="job-actions">
+                    <a href="{% url 'job_details' job.id %}" class="btn">View Details</a>
+                    <a href="{% url 'edit_job' job.id %}" class="btn btn-secondary">Edit</a>
+                    <a href="{% url 'delete_job' job.id %}" class="btn btn-danger">Delete</a>
                 </div>
             </div>
-            <div class="footer-links-group">
-                <div class="footer-links">
-                    <h4>Product</h4>
-                    <a href="#features">Features</a>
-                    <a href="#pricing">Pricing</a>
-                    <a href="#integrations">Integrations</a>
-                    <a href="#">API</a>
-                </div>
-                <div class="footer-links">
-                    <h4>Company</h4>
-                    <a href="#">About</a>
-                    <a href="#">Blog</a>
-                    <a href="#">Careers</a>
-                    <a href="#contact">Contact</a>
-                </div>
-                <div class="footer-links">
-                    <h4>Legal</h4>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Security</a>
-                </div>
-            </div>
+            {% endfor %}
         </div>
-        <p class="footer-copyright">
-            &copy; 2025 . All rights reserved.
-        </p>
-    </footer>
-    <script defer src="{% static 'scripts/main.js' %}"></script>
-    <script defer src="{% static 'scripts/my-jobs.js' %}"></script>
-</body>
+        {% else %}
+        <div class="empty-state">
+            <h2>No jobs posted yet</h2>
+            <p>Start by creating your first job posting</p>
+            <a href="{% url 'add_job' %}" class="btn">Create First Job</a>
+        </div>
+        {% endif %}
 
-</html>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script defer src="{% static 'scripts/my-jobs.js' %}"></script>
+{% endblock %}
