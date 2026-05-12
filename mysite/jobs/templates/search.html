@@ -6,10 +6,10 @@
 {% block content %}
 <section class="search-section">
     <div class="container">
-        <h1>Explore Jobs</h1>
-        <p>Search for a job that matches your skills.</p>
+        <h1>Search Jobs</h1>
+        <p>Filter jobs by title, location, experience, and salary.</p>
 
-        <form method="get" action="{% url 'search' %}">
+        <form id="searchForm" method="get" action="{% url 'search' %}">
 
             <!-- Job Title -->
             <div class="form-group">
@@ -46,29 +46,10 @@
 
             <!-- Submit Button -->
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Find Jobs</button>
-                <a href="{% url 'search' %}" class="btn btn-secondary">Clear Filters</a>
+                <button type="submit" class="btn btn-primary">Search Jobs</button>
+                <a href="{% url 'job_list' %}" class="btn btn-secondary">View All Jobs</a>
             </div>
         </form>
-
-        <!-- Search Results -->
-        {% if jobs %}
-            <div class="search-results">
-                <h2>Search Results ({{ jobs|length }} jobs found)</h2>
-                {% for job in jobs %}
-                    <article class="job-card">
-                        <h3><a href="{% url 'job_details' job.id %}">{{ job.title }}</a></h3>
-                        <p><strong>Company:</strong> {{ job.company_name }}</p>
-                        <p><strong>Salary:</strong> ${{ job.salary|default:"Not specified" }}</p>
-                        <p><strong>Experience:</strong> {{ job.years_of_experience }}+ years</p>
-                        <p class="status"><strong>Status:</strong> <span class="{% if job.status == 'open' %}open{% else %}closed{% endif %}">{{ job.status|upper }}</span></p>
-                        <a href="{% url 'job_details' job.id %}" class="btn btn-small">View Details</a>
-                    </article>
-                {% endfor %}
-            </div>
-        {% elif query or job_title or location or experience or salary %}
-            <p>No jobs found matching your criteria.</p>
-        {% endif %}
     </div>
 </section>
 {% endblock %}

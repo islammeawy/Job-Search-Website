@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from jobs.models import Job
@@ -6,73 +6,37 @@ from django.db.models import Q
 
 @require_http_methods(["GET"])
 def search(request):
-    """Search for jobs - supports both HTML and JSON (AJAX)"""
+    """Search for jobs - redirects to jobs page with filters when form is submitted"""
     
-    query = request.GET.get('q', '').strip()
     job_title = request.GET.get('job_title', '').strip()
     location = request.GET.get('location', '').strip()
     experience = request.GET.get('experience', '').strip()
     salary = request.GET.get('salary', '').strip()
     
-    jobs = Job.objects.filter(status='open')
-    
-    if query:
-        jobs = jobs.filter(
-            Q(title__icontains=query) |
-            Q(description__icontains=query) |
-            Q(company_name__icontains=query)
-        )
-    
-    if job_title:
-        jobs = jobs.filter(
-            Q(title__icontains=job_title) |
-            Q(description__icontains=job_title)
-        )
-    
-    if experience:
-        try:
-            if experience == "0-1":
-                jobs = jobs.filter(years_of_experience__lte=1)
-            elif experience == "2-4":
-                jobs = jobs.filter(years_of_experience__gte=2, years_of_experience__lte=4)
-            elif experience == "5+":
-                jobs = jobs.filter(years_of_experience__gte=5)
-        except ValueError:
-            pass
-    
-    if salary:
-        try:
-            salary_value = float(salary)
-            jobs = jobs.filter(salary__gte=salary_value)
-        except ValueError:
-            pass
-    
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        results = []
-        for job in jobs:
-            results.append({
-                'id': job.id,
-                'title': job.title,
-                'company_name': job.company_name,
-                'salary': str(job.salary) if job.salary else 'Not specified',
-                'years_of_experience': job.years_of_experience,
-                'status': job.status,
-                'description': job.description[:100] + '...' if len(job.description) > 100 else job.description,
-            })
+    # If any filter is provided, redirect to jobs page with filters
+    if job_title or location or experience or salary:
+        # Build query parameters for redirect
+        params = {}
+        if job_title:
+            params['job_title'] = job_title
+        if location:
+            params['location'] = location
+        if experience:
+            params['experience'] = experience
+        if salary:
+            params['salary'] = salary
         
-        return JsonResponse({
-            'success': True,
-            'count': len(results),
-            'jobs': results
-        })
+        # Redirect to jobs page with filters
+        from django.urls import reverse
+        url = reverse('job_list')
+        if params:
+            from urllib.parse import urlencode
+            url += '?' + urlencode(params)
+        
+        return redirect(url)
     
-    return render(request, 'search.html', {
-        'jobs': jobs,
-        'query': query or job_title,
-        'location': location,
-        'experience': experience,
-        'salary': salary
-    })
+    # Otherwise, show the search form
+    return render(request, 'search.html')
 
 @require_http_methods(["GET"])
 def get_all_jobs(request):

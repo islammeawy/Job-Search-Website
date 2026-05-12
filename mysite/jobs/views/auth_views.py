@@ -112,7 +112,7 @@ def signup_view(request):
 
 @require_http_methods(["GET", "POST"])
 def logout_view(request):
-    """Log the user out and redirect to login page."""
+    """Log the user out and redirect to home page."""
     logout(request)
     messages.info(request, 'You have been logged out.')
-    return redirect('login')
+    return redirect('home')

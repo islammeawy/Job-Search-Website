@@ -8,6 +8,18 @@
     <div class="container">
         <h1>Available Jobs</h1>
 
+        <!-- Show active filters -->
+        {% if job_title or location or experience or salary %}
+            <div class="active-filters" style="background: var(--light-color); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg);">
+                <strong>Active Filters:</strong>
+                {% if job_title %}<span class="filter-tag">Title: {{ job_title }}</span>{% endif %}
+                {% if location %}<span class="filter-tag">Location: {{ location }}</span>{% endif %}
+                {% if experience %}<span class="filter-tag">Experience: {{ experience }} years</span>{% endif %}
+                {% if salary %}<span class="filter-tag">Min Salary: ${{ salary }}</span>{% endif %}
+                <a href="{% url 'job_list' %}" class="btn btn-small" style="margin-left: var(--spacing-md);">Clear Filters</a>
+            </div>
+        {% endif %}
+
         {% if jobs %}
             {% for job in jobs %}
                 <article class="job-det">
