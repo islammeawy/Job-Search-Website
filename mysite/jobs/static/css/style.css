@@ -2666,3 +2666,25 @@ legend {
         font-size: var(--font-size-sm);
     }
 }
+
+/* ========================
+   MEMBER 2 — Read-only field & server-side errors
+   ======================== */
+
+/* Read-only field styling (e.g. company_name auto-filled) */
+.readonly-field {
+    background-color: #f0f2f5 !important;
+    color: #6c757d !important;
+    cursor: not-allowed;
+    border-color: #d1d5db !important;
+}
+
+.readonly-field:focus {
+    box-shadow: none !important;
+    border-color: #d1d5db !important;
+}
+
+/* Server-side rendered field errors should always be visible */
+.field-error:not(:empty) {
+    display: block;
+}

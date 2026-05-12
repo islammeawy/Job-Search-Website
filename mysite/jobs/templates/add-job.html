@@ -1,173 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% load static %}
 
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Post a new job listing on JobFinder. Fill in job details and publish to attract top talent.">
-    <title>Add Job - JobFinder</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
+{% block title %}Add Job - JobFinder{% endblock %}
 
-<body>
-
-    <header>
-        <div class="container">
-            <div class="logo-image">
-                <img class="logo-img" src="{% static 'images/logo.jpg' %}" alt="logo-image">
-            </div>
-            <div>
-                <nav class="navbar">
-                    <ul class="nav-links">
-                        <li><a href="{% url 'home' %}">Home</a></li>
-                        <li><a href="{% url 'job_list' %}">Jobs</a></li>
-                        <li><a href="{% url 'applied' %}">Applied Jobs</a></li>
-                        <li><a href="{% url 'search' %}">Search</a></li>
-                    </ul>
-                </nav>
+{% block content %}
+<section class="job-form-section">
+    <div class="container">
+        <div class="job-form-card">
+            <div class="form-header">
+                <h1>Add New Job</h1>
+                <p>Fill in the details below to create a new job listing</p>
             </div>
 
+            <form id="addJobForm" method="post" action="{% url 'add_job' %}" novalidate>
+                {% csrf_token %}
 
-            <div class="nav-actions">
-                <a href="{% url 'login' %}"><button>Login</button></a>
-                <a href="{% url 'signup' %}"><button>Sign Up</button></a>
-            </div>
+                <div class="form-group">
+                    <label for="job_title">Job Title <span class="required">*</span></label>
+                    <input type="text" id="job_title" name="job_title"
+                           placeholder="e.g. Frontend Developer" maxlength="100"
+                           value="{{ form_data.title|default:'' }}">
+                    {% if errors.title %}
+                        <span class="field-error">{{ errors.title }}</span>
+                    {% endif %}
+                </div>
 
-
-        </div>
-    </header>
-
-    <main>
-        <section class="job-form-section">
-            <div class="container">
-                <div class="job-form-card">
-                    <div class="form-header">
-                        <h1>Add New Job</h1>
-                        <p>Fill in the details below to create a new job listing</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="salary">Salary ($) <span class="required">*</span></label>
+                        <input type="number" id="salary" name="salary"
+                               placeholder="e.g. 5000" min="1"
+                               value="{{ form_data.salary|default:'' }}">
+                        {% if errors.salary %}
+                            <span class="field-error">{{ errors.salary }}</span>
+                        {% endif %}
                     </div>
 
-                    <div id="addJobSuccess" class="success-message">
-                        <span>&#10003;</span> Job added successfully! Redirecting...
+                    <div class="form-group">
+                        <label for="years_experience">Years of Experience <span class="required">*</span></label>
+                        <input type="number" id="years_experience" name="years_experience"
+                               placeholder="e.g. 3" min="0" max="50"
+                               value="{{ form_data.years_of_experience|default:'' }}">
+                        {% if errors.years_of_experience %}
+                            <span class="field-error">{{ errors.years_of_experience }}</span>
+                        {% endif %}
                     </div>
-
-                    <form id="addJobForm" novalidate>
-
-                        <div class="form-group">
-                            <label for="job_title">Job Title <span class="required">*</span></label>
-                            <input type="text" id="job_title" name="job_title" placeholder="e.g. Frontend Developer"
-                                maxlength="100">
-                            <span id="job_title_error" class="field-error"></span>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="salary">Salary ($) <span class="required">*</span></label>
-                                <input type="number" id="salary" name="salary" placeholder="e.g. 5000" min="0">
-                                <span id="salary_error" class="field-error"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="years_experience">Years of Experience <span
-                                        class="required">*</span></label>
-                                <input type="number" id="years_experience" name="years_experience" placeholder="e.g. 3"
-                                    min="0" max="50">
-                                <span id="years_experience_error" class="field-error"></span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="company_name">Company Name <span class="required">*</span></label>
-                            <input type="text" id="company_name" name="company_name" placeholder="e.g. Google"
-                                maxlength="100">
-                            <span id="company_name_error" class="field-error"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="job_status">Job Status <span class="required">*</span></label>
-                            <select id="job_status" name="job_status">
-                                <option value="">-- Select Status --</option>
-                                <option value="open">Open</option>
-                                <option value="closed">Closed</option>
-                            </select>
-                            <span id="job_status_error" class="field-error"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="description">Description <span class="required">*</span></label>
-                            <textarea id="description" name="description" rows="5"
-                                placeholder="Enter a detailed job description..." maxlength="2000"></textarea>
-                            <div class="textarea-footer">
-                                <span id="description_error" class="field-error"></span>
-                                <span id="desc_char_count" class="char-counter">0 / 2000</span>
-                            </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="submit" id="addJobBtn" class="btn-primary">
-                                <span>Add Job</span>
-                            </button>
-                            <button type="reset" id="resetBtn" class="btn-secondary">
-                                <span>Reset</span>
-                            </button>
-                        </div>
-
-                    </form>
                 </div>
-            </div>
-        </section>
-    </main>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-left">
-                <div class="footer-logo">
-                    <img class="logo-image" src="{% static 'images/logo.jpg' %}" alt="Logo" height="60px" width="60px">
+                <div class="form-group">
+                    <label for="company_name">Company Name <span class="required">*</span></label>
+                    <input type="text" id="company_name" name="company_name"
+                           value="{{ company_name }}" readonly
+                           class="readonly-field">
                 </div>
-                <p class="footer-desc">
-                    JobFinder is your go-to platform for finding the perfect job.
-                    <br>
-                    We connect job seekers with top employers, making the job search process easier and more efficient.
-                    Whether you're looking for your first job or your next career move, JobFinder has you covered.
-                </p>
-                <div class="footer-socials">
-                    <a href="#"><img src="{% static 'icons/x.jpg' %}" alt="Twitter" height="60px" width="60px"></a>
-                    <a href="#"><img src="{% static 'icons/discord.png' %}" alt="discord" height="60px"
-                            width="60px"></a>
-                    <a href="#"><img src="{% static 'icons/linkedin.png' %}" alt="LinkedIn" height="60px"
-                            width="60px"></a>
+
+                <div class="form-group">
+                    <label for="job_status">Job Status <span class="required">*</span></label>
+                    <select id="job_status" name="job_status">
+                        <option value="">-- Select Status --</option>
+                        <option value="open" {% if form_data.status == 'open' %}selected{% endif %}>Open</option>
+                        <option value="closed" {% if form_data.status == 'closed' %}selected{% endif %}>Closed</option>
+                    </select>
+                    {% if errors.status %}
+                        <span class="field-error">{{ errors.status }}</span>
+                    {% endif %}
                 </div>
-            </div>
-            <div class="footer-links-group">
-                <div class="footer-links">
-                    <h4>Product</h4>
-                    <a href="#features">Features</a>
-                    <a href="#pricing">Pricing</a>
-                    <a href="#integrations">Integrations</a>
-                    <a href="#">API</a>
+
+                <div class="form-group">
+                    <label for="description">Description <span class="required">*</span></label>
+                    <textarea id="description" name="description" rows="5"
+                              placeholder="Enter a detailed job description..." maxlength="2000">{{ form_data.description|default:'' }}</textarea>
+                    <div class="textarea-footer">
+                        {% if errors.description %}
+                            <span class="field-error">{{ errors.description }}</span>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="footer-links">
-                    <h4>Company</h4>
-                    <a href="#">About</a>
-                    <a href="#">Blog</a>
-                    <a href="#">Careers</a>
-                    <a href="#contact">Contact</a>
+
+                <div class="form-actions">
+                    <button type="submit" id="addJobBtn" class="btn-primary">
+                        <span>Add Job</span>
+                    </button>
+                    <button type="reset" id="resetBtn" class="btn-secondary">
+                        <span>Reset</span>
+                    </button>
                 </div>
-                <div class="footer-links">
-                    <h4>Legal</h4>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Security</a>
-                </div>
-            </div>
+
+            </form>
         </div>
-        <p class="footer-copyright">
-            &copy; 2025 . All rights reserved.
-        </p>
-    </footer>
-    <script defer src="{% static 'scripts/main.js' %}"></script>
-    <script defer src="{% static 'scripts/add-job.js' %}"></script>
-</body>
-
-</html>
+    </div>
+</section>
+{% endblock %}
