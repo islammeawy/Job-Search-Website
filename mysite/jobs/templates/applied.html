@@ -1,131 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
 
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Applied Jobs - JobFinder</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
+{% block title %}Applied Jobs - JobFinder{% endblock %}
 
-<body>
-    <header>
-        <div class="container">
-            <div class="logo-image">
-                <img class="logo-img" src="{% static 'images/logo.jpg' %}" alt="JobFinder Logo">
+{% block content %}
+<section class="applied-jobs">
+    <div class="container">
+        <h1>Applied Jobs</h1>
+        <p>Track all the jobs you've applied to and their status.</p>
+
+        {% if applications %}
+            <div class="applied-jobs-list">
+                {% for application in applications %}
+                    <article class="job-card">
+                        <h3><a href="{% url 'job_details' application.job.id %}">{{ application.job.title }}</a></h3>
+                        <p><strong>Company:</strong> {{ application.job.company_name }}</p>
+                        <p><strong>Salary:</strong> ${{ application.job.salary|default:"Not specified" }}</p>
+                        <p><strong>Experience:</strong> {{ application.job.years_of_experience }}+ years</p>
+                        <p><strong>Applied on:</strong> {{ application.applied_at|date:"F d, Y" }}</p>
+                        <p class="status"><strong>Status:</strong> <span class="open">APPLIED</span></p>
+                        <a href="{% url 'job_details' application.job.id %}" class="btn btn-small">View Details</a>
+                    </article>
+                {% endfor %}
             </div>
-            <div>
-                <nav class="navbar">
-                    <ul class="nav-links">
-                        <li><a href="{% url 'home' %}">Home</a></li>
-                        <li><a href="{% url 'job_list' %}">Jobs</a></li>
-                        <li><a href="{% url 'applied' %}" aria-current="page">Applied Jobs</a></li>
-                        <li><a href="{% url 'search' %}">Search</a></li>
-                    </ul>
-                </nav>
+        {% else %}
+            <div class="empty-state">
+                <h2>No Applied Jobs Yet</h2>
+                <p>You haven't applied to any jobs yet. Start exploring and apply to jobs that match your skills!</p>
+                <a href="{% url 'job_list' %}" class="btn btn-primary">Browse Jobs</a>
+                <a href="{% url 'search' %}" class="btn btn-primary">Find Jobs</a>
             </div>
-
-
-            <div class="nav-actions">
-                <a href="{% url 'login' %}"><button>Login</button></a>
-                <a href="{% url 'signup' %}"><button>Sign Up</button></a>
-            </div>
-
-
-        </div>
-    </header>
-
-
-    <main>
-
-        <section class="applied-jobs">
-            <div class="container">
-
-                <h1>Applied Jobs</h1>
-                <p>Track all the jobs you've applied to and their status.</p>
-
-                <!-- Filter Section -->
-                <div class="filter-section">
-                    <label for="status-filter">Filter by Status:</label>
-                    <select id="status-filter">
-                        <option value="">All Jobs</option>
-                        <option value="applied">Applied</option>
-                        <option value="under-review">Under Review</option>
-                        <option value="interview">Interview Scheduled</option>
-                        <option value="rejected">Not Selected</option>
-                    </select>
-                </div>
-
-                <!-- Applied Jobs List -->
-                <div class="applied-jobs-list" id="appliedJobsList">
-                    <!-- Jobs will appear here automatically -->
-                </div>
-
-                <!-- Empty State -->
-                <div class="empty-state" id="emptyState" style="display: none;">
-                    <h2>No Applied Jobs Yet</h2>
-                    <p>You haven't applied to any jobs yet. Start exploring and apply to jobs that match your skills!
-                    </p>
-                    <a href="{% url 'job_list' %}" class="btn btn-primary">Browse Jobs</a>
-                    <a href="{% url 'search' %}" class="btn btn-primary">Find Jobs</a>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-left">
-                <div class="footer-logo">
-                    <img class="logo-image" src="{% static 'images/logo.jpg' %}" alt="Logo" height="60px" width="60px">
-                </div>
-                <p class="footer-desc">
-                    JobFinder is your go-to platform for finding the perfect job.
-                    <br>
-                    We connect job seekers with top employers, making the job search process easier and more efficient.
-                    Whether you're looking for your first job or your next career move, JobFinder has you covered.
-                </p>
-                <div class="footer-socials">
-                    <a href="#"><img src="{% static 'icons/x.jpg' %}" alt="Twitter" height="60px" width="60px"></a>
-                    <a href="#"><img src="{% static 'icons/discord.png' %}" alt="discord" height="60px"
-                            width="60px"></a>
-                    <a href="#"><img src="{% static 'icons/linkedin.png' %}" alt="LinkedIn" height="60px"
-                            width="60px"></a>
-                </div>
-            </div>
-            <div class="footer-links-group">
-                <div class="footer-links">
-                    <h4>Product</h4>
-                    <a href="#features">Features</a>
-                    <a href="#pricing">Pricing</a>
-                    <a href="#integrations">Integrations</a>
-                    <a href="#">API</a>
-                </div>
-                <div class="footer-links">
-                    <h4>Company</h4>
-                    <a href="#">About</a>
-                    <a href="#">Blog</a>
-                    <a href="#">Careers</a>
-                    <a href="#contact">Contact</a>
-                </div>
-                <div class="footer-links">
-                    <h4>Legal</h4>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Security</a>
-                </div>
-            </div>
-        </div>
-        <p class="footer-copyright">
-            &copy; 2025 . All rights reserved.
-        </p>
-    </footer>
-
-    <script defer src="{% static 'scripts/main.js' %}"></script>
-    <script src="{% static 'scripts/applied.js' %}"></script>
-</body>
-
-</html>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

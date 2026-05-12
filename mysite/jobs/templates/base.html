@@ -23,8 +23,12 @@
           <ul class="nav-links">
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'job_list' %}">All Jobs</a></li>
-            {% if user.is_authenticated and user.is_company_admin %}
-            <li><a href="{% url 'my_jobs' %}">My Jobs</a></li>
+            {% if user.is_authenticated %}
+              {% if user.is_company_admin %}
+                <li><a href="{% url 'my_jobs' %}">My Jobs</a></li>
+              {% else %}
+                <li><a href="{% url 'applied' %}">Applied Jobs</a></li>
+              {% endif %}
             {% endif %}
             <li><a href="{% url 'search' %}">Search</a></li>
           </ul>
@@ -36,8 +40,6 @@
           <span class="user-welcome">Welcome, {{ user.first_name|default:user.username }}</span>
           {% if user.is_company_admin %}
             <a href="{% url 'add_job' %}"><button class="btn-primary">Add Job</button></a>
-          {% else %}
-          
           {% endif %}
           <a href="{% url 'logout' %}"><button>Logout</button></a>
         {% else %}
@@ -97,34 +99,6 @@
       </p>
     </footer>
 
-    <!-- Django URL Mapping for JavaScript -->
-    <script>
-      window.DJANGO_URLS = {
-        home: "{% url 'home' %}",
-        login: "{% url 'login' %}",
-        signup: "{% url 'signup' %}",
-        logout: "{% url 'logout' %}",
-        jobs: "{% url 'job_list' %}",
-        job_details: "{% url 'job_details' 0 %}".replace('/0/', '/'),
-        add_job: "{% url 'add_job' %}",
-        edit_job: "{% url 'edit_job' 0 %}".replace('/0/', '/'),
-        delete_job: "{% url 'delete_job' 0 %}".replace('/0/', '/'),
-        apply_job: "{% url 'apply_job' 0 %}".replace('/0/', '/'),
-        applied: "{% url 'applied' %}",
-        my_jobs: "{% url 'my_jobs' %}",
-        search: "{% url 'search' %}"
-      };
-
-      // Django User Context (replaces localStorage for user data)
-      window.DJANGO_USER = {
-        isAuthenticated: {{ user.is_authenticated|lower }},
-        username: "{{ user.username|default:''|escapejs }}",
-        isAdmin: {{ user.is_company_admin|lower }},
-        firstName: "{{ user.first_name|default:''|escapejs }}"
-      };
-    </script>
-
-    <script src="{% static 'scripts/main.js' %}"></script>
     {% block scripts %}{% endblock %}
 
 </body>

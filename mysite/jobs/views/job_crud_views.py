@@ -214,6 +214,10 @@ def applied_jobs(request):
 @login_required(login_url='login')
 def my_jobs(request):
     """View user's posted jobs (for company admins)"""
+    # Check if user is a company admin
+    if not request.user.is_company_admin:
+        return redirect('home')
+    
     jobs = Job.objects.filter(created_by=request.user)
     open_jobs_count = jobs.filter(status='open').count()
     closed_jobs_count = jobs.filter(status='closed').count()

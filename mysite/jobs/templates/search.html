@@ -4,85 +4,71 @@
 {% block title %}Search Jobs - JobFinder{% endblock %}
 
 {% block content %}
-        <section class="search-section">
-            <div class="container">
-                <h1>Explore Jobs</h1>
-                <p>Search for a job that matches your skills.</p>
+<section class="search-section">
+    <div class="container">
+        <h1>Explore Jobs</h1>
+        <p>Search for a job that matches your skills.</p>
 
-                <form id="jobSearchForm" novalidate>
+        <form method="get" action="{% url 'search' %}">
 
-                    <!-- Job Title -->
-                    <div class="form-group">
-                        <label for="job_title">Job Title <span class="required">*</span></label>
-                        <div class="input-wrapper">
-                            <input type="text" id="job_title" name="job_title"
-                                placeholder="e.g., Developer, Designer, Manager" aria-describedby="job-error job-hint"
-                                autocomplete="off" required>
-                            <span id="char-count" class="char-count" aria-live="polite">0/100</span>
-                        </div>
-                        <small id="job-hint" class="hint">Letters, numbers, and hyphens only</small>
-                        <small id="job-error" class="error-message" role="alert"></small>
-                    </div>
-
-                    <!-- Location -->
-                    <div class="form-group">
-                        <label for="location">Location</label>
-                        <input type="text" id="location" name="location" placeholder="City, state, or 'Remote'"
-                            autocomplete="address-level2">
-                    </div>
-
-                    <!-- Job Type -->
-                    <div class="form-group">
-                        <fieldset>
-                            <legend>Job Type</legend>
-                            <div class="checkbox-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="job_type" value="full-time">
-                                    Full-time
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="job_type" value="part-time">
-                                    Part-time
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="job_type" value="remote">
-                                    Remote
-                                </label>
-                            </div>
-                        </fieldset>
-                    </div>
-
-                    <!-- Experience -->
-                    <div class="form-group">
-                        <label for="experience">Years of Experience</label>
-                        <select name="experience" id="experience" aria-label="Select years of experience">
-                            <option value="">Any</option>
-                            <option value="0-1">0 - 1 years</option>
-                            <option value="2-4">2 - 4 years</option>
-                            <option value="5+">5+ years</option>
-                        </select>
-                    </div>
-
-                    <!-- Salary Range (Optional) -->
-                    <div class="form-group">
-                        <label for="salary">Minimum Salary (Optional)</label>
-                        <input type="number" id="salary" name="salary" placeholder="e.g., 50000" min="0" step="1000">
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Find Jobs</button>
-                        <button type="reset" class="btn btn-secondary">Clear Filters</button>
-                    </div>
-
-                    <div id="form-success" class="success-message" role="alert" aria-live="polite"></div>
-                </form>
-
+            <!-- Job Title -->
+            <div class="form-group">
+                <label for="job_title">Job Title</label>
+                <input type="text" id="job_title" name="job_title"
+                    placeholder="e.g., Developer, Designer, Manager"
+                    value="{{ job_title|default:'' }}">
             </div>
-        </section>
-    {% endblock %}
 
-{% block scripts %}
-    <script defer src="{% static 'scripts/main.js' %}"></script>
-    <script src="{% static 'scripts/search.js' %}"></script>
+            <!-- Location -->
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" placeholder="City, state, or 'Remote'"
+                    value="{{ location|default:'' }}">
+            </div>
+
+            <!-- Experience -->
+            <div class="form-group">
+                <label for="experience">Years of Experience</label>
+                <select name="experience" id="experience">
+                    <option value="">Any</option>
+                    <option value="0-1" {% if experience == '0-1' %}selected{% endif %}>0 - 1 years</option>
+                    <option value="2-4" {% if experience == '2-4' %}selected{% endif %}>2 - 4 years</option>
+                    <option value="5+" {% if experience == '5+' %}selected{% endif %}>5+ years</option>
+                </select>
+            </div>
+
+            <!-- Salary Range (Optional) -->
+            <div class="form-group">
+                <label for="salary">Minimum Salary (Optional)</label>
+                <input type="number" id="salary" name="salary" placeholder="e.g., 50000" min="0" step="1000"
+                    value="{{ salary|default:'' }}">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Find Jobs</button>
+                <a href="{% url 'search' %}" class="btn btn-secondary">Clear Filters</a>
+            </div>
+        </form>
+
+        <!-- Search Results -->
+        {% if jobs %}
+            <div class="search-results">
+                <h2>Search Results ({{ jobs|length }} jobs found)</h2>
+                {% for job in jobs %}
+                    <article class="job-card">
+                        <h3><a href="{% url 'job_details' job.id %}">{{ job.title }}</a></h3>
+                        <p><strong>Company:</strong> {{ job.company_name }}</p>
+                        <p><strong>Salary:</strong> ${{ job.salary|default:"Not specified" }}</p>
+                        <p><strong>Experience:</strong> {{ job.years_of_experience }}+ years</p>
+                        <p class="status"><strong>Status:</strong> <span class="{% if job.status == 'open' %}open{% else %}closed{% endif %}">{{ job.status|upper }}</span></p>
+                        <a href="{% url 'job_details' job.id %}" class="btn btn-small">View Details</a>
+                    </article>
+                {% endfor %}
+            </div>
+        {% elif query or job_title or location or experience or salary %}
+            <p>No jobs found matching your criteria.</p>
+        {% endif %}
+    </div>
+</section>
 {% endblock %}
