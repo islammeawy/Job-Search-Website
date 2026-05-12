@@ -182,28 +182,28 @@ def apply_job(request, id):
     job = get_object_or_404(Job, id=id)
     
     if request.method == 'POST':
+        if job.status != 'open':
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return handle_ajax_response(False, 'This job is closed and cannot be applied for', status=400)
+            return redirect('job_details', id=id)
+
         # Check if already applied
         existing = check_job_application_exists(request.user, job)
         
         if existing:
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return handle_ajax_response(
-                    False, 
-                    'You already applied for this job', 
-                    status=400
-                )
-            else:
-                return redirect('job_details', id=id)
+                return handle_ajax_response(False, 'You already applied for this job', status=400)
+            return redirect('job_details', id=id)
         
         # Create application
         Application.objects.create(user=request.user, job=job)
         
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return handle_ajax_response(True, 'Applied successfully!')
-        else:
-            return redirect('applied')
+        return redirect('applied')
     
-    return render(request, 'job-details.html', {'job': job})
+    already_applied = check_job_application_exists(request.user, job)
+    return render(request, 'job-details.html', {'job': job, 'already_applied': already_applied})
 
 @login_required(login_url='login')
 def applied_jobs(request):

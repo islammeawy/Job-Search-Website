@@ -10,40 +10,48 @@
 
         <!-- Show active filters -->
         {% if job_title or location or experience or salary %}
-            <div class="active-filters" style="background: var(--light-color); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg);">
-                <strong>Active Filters:</strong>
-                {% if job_title %}<span class="filter-tag">Title: {{ job_title }}</span>{% endif %}
-                {% if location %}<span class="filter-tag">Location: {{ location }}</span>{% endif %}
-                {% if experience %}<span class="filter-tag">Experience: {{ experience }} years</span>{% endif %}
-                {% if salary %}<span class="filter-tag">Min Salary: ${{ salary }}</span>{% endif %}
-                <a href="{% url 'job_list' %}" class="btn btn-small" style="margin-left: var(--spacing-md);">Clear Filters</a>
-            </div>
+        <div class="active-filters"
+            style="background: var(--light-color); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg);">
+            <strong>Active Filters:</strong>
+            {% if job_title %}<span class="filter-tag">Title: {{ job_title }}</span>{% endif %}
+            {% if location %}<span class="filter-tag">Location: {{ location }}</span>{% endif %}
+            {% if experience %}<span class="filter-tag">Experience: {{ experience }} years</span>{% endif %}
+            {% if salary %}<span class="filter-tag">Min Salary: ${{ salary }}</span>{% endif %}
+            <a href="{% url 'job_list' %}" class="btn btn-small" style="margin-left: var(--spacing-md);">Clear
+                Filters</a>
+        </div>
         {% endif %}
 
         {% if jobs %}
-            {% for job in jobs %}
-                <article class="job-det">
-                    <h2>{{ job.title }}</h2>
-                    <p><strong>Company:</strong> {{ job.company_name }}</p>
-                    <p><strong>Salary:</strong> ${{ job.salary|default:"Not specified" }}</p>
-                    <p><strong>Experience:</strong> {{ job.years_of_experience }}+ years</p>
-                    <p class="status"><strong>Status:</strong> <span class="{% if job.status == 'open' %}open{% else %}closed{% endif %}">{{ job.status|upper }}</span></p>
-                    <a href="{% url 'job_details' job.id %}" class="view-details">View Details</a>
-                    
-                    {% if user.is_authenticated %}
-                        {% if not user.is_company_admin %}
-                            <form method="post" action="{% url 'apply_job' job.id %}" style="display: inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="apply-btn">Apply</button>
-                            </form>
-                        {% endif %}
-                    {% else %}
-                        <a href="{% url 'login' %}?next={% url 'job_details' job.id %}" class="apply-btn">Login to Apply</a>
-                    {% endif %}
-                </article>
-            {% endfor %}
+        {% for job in jobs %}
+        <article class="job-det">
+            <h2>{{ job.title }}</h2>
+            <p><strong>Company:</strong> {{ job.company_name }}</p>
+            <p><strong>Salary:</strong> ${{ job.salary|default:"Not specified" }}</p>
+            <p><strong>Experience:</strong> {{ job.years_of_experience }}+ years</p>
+            <p class="status"><strong>Status:</strong> <span
+                    class="{% if job.status == 'open' %}open{% else %}closed{% endif %}">{{ job.status|upper }}</span>
+            </p>
+            <a href="{% url 'job_details' job.id %}" class="view-details">View Details</a>
+
+            {% if user.is_authenticated %}
+            {% if not user.is_company_admin %}
+            {% if job.id in applied_job_ids %}
+            <button class="apply-btn applied" disabled>Already Applied</button>
+            {% else %}
+            <form method="post" action="{% url 'apply_job' job.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="apply-btn">Apply</button>
+            </form>
+            {% endif %}
+            {% endif %}
+            {% else %}
+            <a href="{% url 'login' %}?next={% url 'job_details' job.id %}" class="apply-btn">Login to Apply</a>
+            {% endif %}
+        </article>
+        {% endfor %}
         {% else %}
-            <p>No jobs available at the moment.</p>
+        <p>No jobs available at the moment.</p>
         {% endif %}
     </div>
 </section>

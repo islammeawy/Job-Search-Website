@@ -7,42 +7,50 @@
 <section class="job-details">
     <div class="container">
         {% if job %}
-            <h1>Job Details</h1>
+        <h1>Job Details</h1>
 
-            <article class="Job-Description">
-                <h2>{{ job.title }}</h2>
-                <p><strong>Company:</strong> {{ job.company_name }}</p>
-                <p><strong>Salary:</strong> ${{ job.salary|default:"Not specified" }}</p>
-                <p><strong>Experience Required:</strong> {{ job.years_of_experience }}+ years</p>
-                <p class="status"><strong>Status:</strong> <span class="{% if job.status == 'open' %}open{% else %}closed{% endif %}">{{ job.status|upper }}</span></p>
+        <article class="Job-Description">
+            <h2>{{ job.title }}</h2>
+            <p><strong>Company:</strong> {{ job.company_name }}</p>
+            <p><strong>Salary:</strong> ${{ job.salary|default:"Not specified" }}</p>
+            <p><strong>Experience Required:</strong> {{ job.years_of_experience }}+ years</p>
+            <p class="status"><strong>Status:</strong> <span
+                    class="{% if job.status == 'open' %}open{% else %}closed{% endif %}">{{ job.status|upper }}</span>
+            </p>
 
-                <h3>Job Description</h3>
-                <p>{{ job.description }}</p>
+            <h3>Job Description</h3>
+            <p>{{ job.description }}</p>
 
-                {% if user.is_authenticated %}
-                    {% if not user.is_company_admin %}
-                        <form method="post" action="{% url 'apply_job' job.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">Apply Now!</button>
-                        </form>
-                    {% else %}
-                        <p>You are a company admin and cannot apply for jobs.</p>
-                        {% if job.created_by == user %}
-                            <a href="{% url 'edit_job' job.id %}" class="btn btn-secondary">Edit Job</a>
-                            <a href="{% url 'delete_job' job.id %}" class="btn btn-danger">Delete Job</a>
-                        {% endif %}
-                    {% endif %}
-                {% else %}
-                    <a href="{% url 'login' %}?next={% url 'job_details' job.id %}" class="btn btn-primary">Login to Apply</a>
-                {% endif %}
-                
-                <br><br>
-                <a href="{% url 'job_list' %}">Back to Jobs</a>
-            </article>
-        {% else %}
-            <h1>Job Not Found</h1>
-            <p>The job you're looking for doesn't exist or has been deleted.</p>
+            {% if user.is_authenticated %}
+            {% if not user.is_company_admin %}
+            {% if job.status != 'open' %}
+            <button class="btn btn-secondary" disabled>This job is closed</button>
+            {% elif already_applied %}
+            <button class="btn btn-secondary" disabled>Already Applied</button>
+            {% else %}
+            <form method="post" action="{% url 'apply_job' job.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Apply Now!</button>
+            </form>
+            {% endif %}
+            {% else %}
+            <p>You are a company admin and cannot apply for jobs.</p>
+            {% if job.created_by == user %}
+            <a href="{% url 'edit_job' job.id %}" class="btn btn-secondary">Edit Job</a>
+            <a href="{% url 'delete_job' job.id %}" class="btn btn-danger">Delete Job</a>
+            {% endif %}
+            {% endif %}
+            {% else %}
+            <a href="{% url 'login' %}?next={% url 'job_details' job.id %}" class="btn btn-primary">Login to Apply</a>
+            {% endif %}
+
+            <br><br>
             <a href="{% url 'job_list' %}">Back to Jobs</a>
+        </article>
+        {% else %}
+        <h1>Job Not Found</h1>
+        <p>The job you're looking for doesn't exist or has been deleted.</p>
+        <a href="{% url 'job_list' %}">Back to Jobs</a>
         {% endif %}
     </div>
 </section>
