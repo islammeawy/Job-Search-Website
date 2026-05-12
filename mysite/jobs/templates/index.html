@@ -90,7 +90,33 @@
     </div>
 
     <div class="experience-categories" aria-live="polite">
-      <!-- Dynamic experience cards will be rendered here by main.js -->
+      <div class="experience-card">
+        <img src="{% static 'images/enty-level-IT_1500x680.jfif' %}" alt="Entry Level Jobs">
+        <h3>Entry Level</h3>
+        <p>Start your career journey</p>
+        <a href="{% url 'search' %}?experience=entry" class="btn btn-small">Browse Jobs</a>
+      </div>
+
+      <div class="experience-card">
+        <img src="{% static 'images/mid level.jpg' %}" alt="Mid Level Jobs">
+        <h3>Mid Level</h3>
+        <p>Advance your skills</p>
+        <a href="{% url 'search' %}?experience=mid" class="btn btn-small">Browse Jobs</a>
+      </div>
+
+      <div class="experience-card">
+        <img src="{% static 'images/senior.webp' %}" alt="Senior Jobs">
+        <h3>Senior</h3>
+        <p>Lead and mentor teams</p>
+        <a href="{% url 'search' %}?experience=senior" class="btn btn-small">Browse Jobs</a>
+      </div>
+
+      <div class="experience-card">
+        <img src="{% static 'images/excecutive.jpg' %}" alt="Executive Jobs">
+        <h3>Executive</h3>
+        <p>Executive leadership roles</p>
+        <a href="{% url 'search' %}?experience=executive" class="btn btn-small">Browse Jobs</a>
+      </div>
     </div>
   </div>
 </section>
