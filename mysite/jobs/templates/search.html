@@ -1,39 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
 
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Jobs - JobFinder</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
+{% block title %}Search Jobs - JobFinder{% endblock %}
 
-<body>
-
-    <header>
-        <div class="container">
-            <div class="logo-image">
-                <img class="logo-img" src="{% static 'images/logo.jpg' %}" alt="JobFinder Logo">
-            </div>
-
-            <nav class="navbar">
-                <ul class="nav-links">
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'job_list' %}">Jobs</a></li>
-                    <li><a href="{% url 'applied' %}">Applied Jobs</a></li>
-                    <li><a href="{% url 'search' %}" aria-current="page">Search</a></li>
-                </ul>
-            </nav>
-
-            <div class="nav-actions">
-                <a href="{% url 'login' %}"><button type="button">Login</button></a>
-                <a href="{% url 'signup' %}"><button type="button">Sign Up</button></a>
-            </div>
-        </div>
-    </header>
-
-    <main>
+{% block content %}
         <section class="search-section">
             <div class="container">
                 <h1>Explore Jobs</h1>
@@ -110,10 +80,9 @@
 
             </div>
         </section>
-    </main>
+    {% endblock %}
 
+{% block scripts %}
     <script defer src="{% static 'scripts/main.js' %}"></script>
     <script src="{% static 'scripts/search.js' %}"></script>
-</body>
-
-</html>
+{% endblock %}

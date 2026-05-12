@@ -4,6 +4,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from jobs.models import Job, Application
+from jobs.utils import (
+    get_job_with_owner_check, 
+    get_application_with_user_check,
+    check_job_application_exists,
+    prepare_job_form_data,
+    handle_ajax_response
+)
 
 
 # ============================================================
@@ -112,11 +119,11 @@ def add_job(request):
 @login_required(login_url='login')
 def edit_job(request, id):
     """Edit an existing job posting — owner only."""
-    job = get_object_or_404(Job, id=id)
-
-    # Ownership check
-    if job.created_by != request.user:
-        return HttpResponseForbidden('You are not allowed to edit this job.')
+    job = get_job_with_owner_check(request, id)
+    
+    # Check if it's an HttpResponseForbidden
+    if hasattr(job, 'status_code'):
+        return job
 
     if request.method == 'POST':
         cleaned, errors = _validate_job_fields(request.POST)
@@ -140,13 +147,7 @@ def edit_job(request, id):
         return redirect('job_list')
 
     # GET — pre-populate form with existing data
-    form_data = {
-        'title': job.title,
-        'description': job.description,
-        'salary': job.salary,
-        'status': job.status,
-        'years_of_experience': job.years_of_experience,
-    }
+    form_data = prepare_job_form_data(job)
     return render(request, 'edit-job.html', {
         'job': job,
         'form_data': form_data,
@@ -157,11 +158,11 @@ def edit_job(request, id):
 @login_required(login_url='login')
 def delete_job(request, id):
     """Delete a job posting — owner only, with confirmation."""
-    job = get_object_or_404(Job, id=id)
-
-    # Ownership check
-    if job.created_by != request.user:
-        return HttpResponseForbidden('You are not allowed to delete this job.')
+    job = get_job_with_owner_check(request, id)
+    
+    # Check if it's an HttpResponseForbidden
+    if hasattr(job, 'status_code'):
+        return job
 
     if request.method == 'POST':
         job.delete()
@@ -182,14 +183,15 @@ def apply_job(request, id):
     
     if request.method == 'POST':
         # Check if already applied
-        existing = Application.objects.filter(user=request.user, job=job).exists()
+        existing = check_job_application_exists(request.user, job)
         
         if existing:
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({
-                    'success': False,
-                    'message': 'You already applied for this job'
-                }, status=400)
+                return handle_ajax_response(
+                    False, 
+                    'You already applied for this job', 
+                    status=400
+                )
             else:
                 return redirect('job_details', id=id)
         
@@ -197,10 +199,7 @@ def apply_job(request, id):
         Application.objects.create(user=request.user, job=job)
         
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({
-                'success': True,
-                'message': 'Applied successfully!'
-            })
+            return handle_ajax_response(True, 'Applied successfully!')
         else:
             return redirect('applied')
     

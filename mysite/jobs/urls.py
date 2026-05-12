@@ -12,7 +12,7 @@ urlpatterns = [
     
     # Job listing and details
     path('jobs/', job_views.job_list, name='job_list'),
-    path('jobs/<slug:id>/', job_views.job_details, name='job_details'),
+    path('jobs/<int:id>/', job_views.job_details, name='job_details'),
     
     # Job CRUD operations
     path('jobs/add/', job_crud_views.add_job, name='add_job'),

@@ -37,7 +37,7 @@
           {% if user.is_company_admin %}
             <a href="{% url 'add_job' %}"><button class="btn-primary">Add Job</button></a>
           {% else %}
-            <a href="{% url 'applied' %}"><button class="btn-primary">My Applications</button></a>
+          
           {% endif %}
           <a href="{% url 'logout' %}"><button>Logout</button></a>
         {% else %}
@@ -118,9 +118,9 @@
       // Django User Context (replaces localStorage for user data)
       window.DJANGO_USER = {
         isAuthenticated: {{ user.is_authenticated|lower }},
-        username: "{{ user.username|default:'' }}",
+        username: "{{ user.username|default:''|escapejs }}",
         isAdmin: {{ user.is_company_admin|lower }},
-        firstName: "{{ user.first_name|default:'' }}"
+        firstName: "{{ user.first_name|default:''|escapejs }}"
       };
     </script>
 

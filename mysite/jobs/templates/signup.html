@@ -1,46 +1,25 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - JobFinder</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <style>
-        /* ── Alert / message banners ── */
-        .alert {
-            padding: 10px 16px;
-            border-radius: 4px;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-        }
-        .alert-error   { background: #fde8e8; color: #c0392b; border: 1px solid #e74c3c; }
-        .alert-success { background: #e8f8e8; color: #1e7e34; border: 1px solid #28a745; }
-        .alert-info    { background: #e8f0fe; color: #1a56db; border: 1px solid #3b82f6; }
+
+{% block title %}Sign Up - JobFinder{% endblock %}
+
+{% block styles %}
+<style>
+    /* ── Alert / message banners ── */
+    .alert {
+        padding: 10px 16px;
+        border-radius: 4px;
+        margin-bottom: 12px;
+        font-size: 0.9rem;
+    }
+    .alert-error   { background: #fde8e8; color: #c0392b; border: 1px solid #e74c3c; }
+    .alert-success { background: #e8f8e8; color: #1e7e34; border: 1px solid #28a745; }
+    .alert-info    { background: #e8f0fe; color: #1a56db; border: 1px solid #3b82f6; }
+    
     </style>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="logo-image">
-                <a href="{% url 'home' %}">
-                    <img class="logo-img" src="{% static 'images/logo.jpg' %}" alt="JobFinder Logo">
-                </a>
-            </div>
-            <div>
-                <nav class="navbar">
-                    <ul class="nav-links">
-                        <li><a href="{% url 'home' %}">Home</a></li>
-                        <li><a href="{% url 'job_list' %}">Jobs</a></li>
-                        <li><a href="{% url 'search' %}">Search</a></li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="nav-actions">
-                <a href="{% url 'login' %}"><button>Login</button></a>
-            </div>
-        </div>
-    </header>
+{% endblock %}
+
+{% block content %}
 
     <section class="section">
         <div class="container">
@@ -140,8 +119,8 @@
                     </fieldset>
                     <br>
 
-                    <!-- Company fields — shown/hidden by JS; also pre-shown if user_type == company -->
-                    <div id="companyFields" style="display: {% if user_type == 'company' %}block{% else %}none{% endif %};">
+                    <!-- Company fields — shown/hidden by JS -->
+                    <div id="companyFields" style="display: none;">
                         <label for="company_name">Company Name:</label>
                         <input
                             type="text"
@@ -219,35 +198,41 @@
             </div>
         </div>
         <p class="footer-copyright">&copy; 2025 . All rights reserved.</p>
-    </footer>
+    {% endblock %}
 
-    <script>
-        // Toggle company fields when user type radio changes
-        document.addEventListener('DOMContentLoaded', function () {
-            const radios = document.querySelectorAll('input[name="user_type"]');
-            const companyFields = document.getElementById('companyFields');
+{% block scripts %}
+<script>
+    // Toggle company fields when user type radio changes
+    document.addEventListener('DOMContentLoaded', function () {
+        const radios = document.querySelectorAll('input[name="user_type"]');
+        const companyFields = document.getElementById('companyFields');
 
-            radios.forEach(function (radio) {
-                radio.addEventListener('change', function () {
-                    if (this.value === 'company') {
-                        companyFields.style.display = 'block';
-                    } else {
-                        companyFields.style.display = 'none';
-                        document.getElementById('company_name').value = '';
-                    }
-                });
-            });
+        // Set initial visibility based on checked radio
+        const checkedRadio = document.querySelector('input[name="user_type"]:checked');
+        if (checkedRadio && checkedRadio.value === 'company') {
+            companyFields.style.display = 'block';
+        }
 
-            // Client-side password match check before submit
-            document.getElementById('signupForm').addEventListener('submit', function (e) {
-                const pw  = document.getElementById('password').value;
-                const cpw = document.getElementById('confirm_password').value;
-                if (pw !== cpw) {
-                    e.preventDefault();
-                    alert('Passwords do not match.');
+        radios.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                if (this.value === 'company') {
+                    companyFields.style.display = 'block';
+                } else {
+                    companyFields.style.display = 'none';
+                    document.getElementById('company_name').value = '';
                 }
             });
         });
-    </script>
-</body>
-</html>
+
+        // Client-side password match check before submit
+        document.getElementById('signupForm').addEventListener('submit', function (e) {
+            const pw  = document.getElementById('password').value;
+            const cpw = document.getElementById('confirm_password').value;
+            if (pw !== cpw) {
+                e.preventDefault();
+                alert('Passwords do not match.');
+            }
+        });
+    });
+</script>
+{% endblock %}
