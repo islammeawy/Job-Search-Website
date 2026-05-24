@@ -3,7 +3,7 @@ function displayAppliedJobs() {
     const jobsList = document.getElementById("appliedJobsList");
     const emptyState = document.getElementById("emptyState");
 
-    // Fetch applied jobs from backend
+    // Fetch applied jobs from backend  
     fetch('/api/applied-jobs/')
         .then(response => response.json())
         .then(data => {

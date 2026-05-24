@@ -97,7 +97,7 @@ function handleSearch(event) {
     if (location) params.append('location', location);
     if (experience) params.append('experience', experience);
     if (salary) params.append('salary', salary);
-
+  
     // Call backend API with AJAX
     fetch(`/search/?${params.toString()}`, {
         headers: {
